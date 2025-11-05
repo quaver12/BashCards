@@ -11,9 +11,48 @@ void help(){
     printf("help()\n");
 }
 
-// Incomplete
+//adds questions and answers of user input to decks 
 void add(){
-    printf("add()\n");
+
+	FILE *activeDeckFile;
+	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","a");
+
+
+	printf("Enter the question you'd like to ask! (start line with :h for header)\n");
+
+	char input[200] = {};
+	fgets(input, sizeof(input), stdin);
+	
+	//if header tag seen only add first line
+	if (input[0]=='h' && input[1]==':'){
+		fprintf(activeDeckFile,"\n");
+		fprintf(activeDeckFile, "%s",input);
+		fprintf(activeDeckFile,"\n");
+			
+	//if h: not seen, prompt user for q and a
+	}else{
+
+		fprintf(activeDeckFile, "q:");
+		fprintf(activeDeckFile, "%s",input);
+
+
+		printf("Enter the specific answer you're looking for:\n");
+		fgets(input, sizeof(input), stdin);
+		fprintf(activeDeckFile, "a:");
+		fprintf(activeDeckFile, "%s",input);
+
+		printf("Enter any explanation you'd like about the answer.\n");
+		fgets(input, sizeof(input), stdin);
+		fprintf(activeDeckFile, "	- ");
+		fprintf(activeDeckFile, "%s",input);
+
+
+	}
+
+	printf("Flashcard saved and editable in decks/PredicarteLogicIntro.txt\n");
+		
+        fclose(activeDeckFile);
+
 }
 
 
