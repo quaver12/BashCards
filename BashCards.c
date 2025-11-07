@@ -1,10 +1,35 @@
 #include <stdio.h>
 #include <string.h>
-//#include <stdlib.h>
-//#include <time.h>
+#include <stdlib.h>
+#include <time.h>
 
 
-//--------------------------- Functions ---------------------------
+// ------------------------------------------ General Utility Functions ------------------------------------------
+
+// Returns number of lines in a .txt file
+int countFileLines(char *fileName){
+    // Counts numbers of lines in txt file by counting number of '\n's used.
+
+    FILE *readInFile;
+    readInFile = fopen(fileName,"r");
+
+    int count = 0, lines = 0, character;
+
+    while (character != EOF){
+        character = fgetc(readInFile);
+        if (character == '\n'){
+            lines++;
+        }
+        count++;
+    }
+
+    fclose(readInFile);
+
+    return lines;
+}
+
+
+//--------------------------- App Functions ---------------------------
 
 // Incomplete
 void help(){
@@ -52,12 +77,114 @@ void add(){
 	printf("Flashcard saved and editable in decks/PredicarteLogicIntro.txt\n");
 		
         fclose(activeDeckFile);
-
 }
 
+// lists all downloaded decks (.txt files in decks/)
+void decks(){
+	printf("deck()");
+}
+
+// tests user on selected deck
+void testme(){
+	printf("testme()");
+	//list available decks
+
+	//ask user which one to open
+	//using test example deck for time being.
+	FILE *activeDeckFile;
+	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","r");
+	
+	char activeLine[100];
+	int qNum = 2;
+	int hNum = -1;
+	int headerAndQsLocations[10][60] = {};
+
+
+	// this constructs an array with the locations of each header and array as it comes across them, as well as the number of questions
+	// e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
+	for (int lineNum = 0; lineNum< countFileLines("decks/PredicateLogicIntro.txt"); lineNum++){
+		//printf("in the loop\n");	
+		int n = 40;
+		fgets(activeLine,n, activeDeckFile);
+		//printf("%s",activeLine);
+		if (activeLine[0] == 'h' && activeLine[1] == ':'){
+			printf("header found on line %d\n",lineNum);
+			// then it's a header
+			hNum++;
+			headerAndQsLocations[hNum][0]=lineNum;
+			qNum = 2;
+			printf(" - header linenumber (%d) written to array[%d][%d]\n",headerAndQsLocations[hNum][0],hNum,0);
+		}else if (activeLine[0] == 'q' && activeLine[1] == ':'){
+			//then it's a question	
+			printf("question found on line %d\n",lineNum);
+			headerAndQsLocations[hNum][qNum]=lineNum;
+			printf(" - question linenumber (%d) written to array[%d][%d]\n",headerAndQsLocations[hNum][qNum],hNum,qNum);
+			qNum++;
+			printf("number of questions in previous header: %d\n",qNum-2);
+
+			//writes qNum-2 to the array each time,
+			//so when the loop leaves and goes to the next header,
+			//headerAndQsLocations[hNum][1] will be left with the number of questions in that header
+			headerAndQsLocations[hNum][1]=qNum-2;
+			//printf("%d\n",headerAndQsLocations[hNum][qNum]);
+		}
+	}
+	
+
+	srand(time(NULL));
+	
+	//go one header at a time
+	for (int i = 0; i < hNum ;i++){
+	//choose a random question within that header and ask it
+		printf("looking at header %d\n",hNum);
+		
+		//shuffle array (but only from [i][1] onwards)
+		
+		for (int x = 2; x < headerAndQsLocations[i][1] + 2 ; x++){
+			int temp = 0;
+			int transferTo = 0;
+			temp = headerAndQsLocations[i][x];
+			transferTo = rand() % (headerAndQsLocations[i][1]) + 2;
+			//printf("looking at digit %d of the array\n",x);
+			//printf(" temp is %d\n", temp);
+			//printf(" randomly generated address 'transferTo' is : %d\n", transferTo);
+			//printf(" value at the location of transferTo is %d\n", headerAndQsLocations[i][transferTo]);
+			//printf("values before switch: %d %d\n", headerAndQsLocations[i][x],  headerAndQsLocations[i][transferTo]);
+			headerAndQsLocations[i][x] = headerAndQsLocations[i][transferTo];
+			headerAndQsLocations[i][transferTo] = temp; 
+			//printf("values after switch: %d %d\n", headerAndQsLocations[i][x],  headerAndQsLocations[i][transferTo]);
+			//printf("%d\n",headerAndQsLocations[i][x]);
+			for (int o = 0 ; o < 20; o ++){
+				printf("%d,",headerAndQsLocations[i][o]);
+			}
+			printf("\n");
+		}
+
+		//ask question for each question in the array
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+
+
+        fclose(activeDeckFile);
+}
 
 //--------------------------- Function Selector ---------------------------
 
@@ -72,6 +199,10 @@ int main(int argc, char *argv[]){
     }else if (strcmp(argv[1],"add")==0){
         //add
 	add();
+
+    }else if (strcmp(argv[1],"testme")==0){
+        //asks practice questions from chosen deck of flashcards
+	testme();
 
     }else{
         printf("Unknown BashCards command. Please try again.\n");
