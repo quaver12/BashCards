@@ -29,6 +29,32 @@ int countFileLines(char *fileName){
 }
 
 
+// Intended to work the same way as fgets, except you can pass in the specific line number
+// of a .txt file you want it to return.
+void fgetsAtLineNum(char *stringLocation, int bufferSize, char *fileName, int lineNum){
+	char lineString[bufferSize] = {};
+	//char *variableOutsideTheFunction = stringLocation;
+	FILE *activeDeckFile;
+	activeDeckFile = fopen(fileName,"r");
+	
+	int n = 40;
+	for (int i = 0; i < lineNum ; i ++){
+		fgets(lineString,n, activeDeckFile);
+	}
+	//printf("%c\n",lineString);
+	// i need to set the variable at the location stringLocation to linesString[0]
+	// and then probably for lineString [1] 2 3 etc...
+	for (int i = 0; i < bufferSize ; i ++){
+		*(stringLocation + i) = lineString[i];
+	}
+	
+
+	//return "ohno";
+        fclose(activeDeckFile);
+	//printf("in function %s",lineString);
+}
+
+
 //--------------------------- App Functions ---------------------------
 
 // Incomplete
@@ -102,6 +128,7 @@ void testme(){
 
 	// this constructs an array with the locations of each header and array as it comes across them, as well as the number of questions
 	// e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
+	// headerAndQsLocations[headernumber][]=[line of header, number of questions, line number of question 1, line number of q2, etc...]
 	for (int lineNum = 0; lineNum< countFileLines("decks/PredicateLogicIntro.txt"); lineNum++){
 		//printf("in the loop\n");	
 		int n = 40;
@@ -135,7 +162,6 @@ void testme(){
 	
 	//go one header at a time
 	for (int i = 0; i < hNum ;i++){
-	//choose a random question within that header and ask it
 		printf("looking at header %d\n",hNum);
 		
 		//shuffle array (but only from [i][1] onwards)
@@ -159,29 +185,22 @@ void testme(){
 			}
 			printf("\n");
 		}
-
+		//now the questions are shuffled
 		//ask question for each question in the array
+		for (int x = 2; x < headerAndQsLocations[i][1];i++){
+
+		
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+		}
 
 
 	}
-
+	char string[60] = "eeeeeeeeee";
+	fgetsAtLineNum(&string[0],50,"decks/PredicateLogicIntro.txt",4);
+	printf("%s",string);
 
         fclose(activeDeckFile);
 }
