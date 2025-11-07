@@ -32,26 +32,32 @@ int countFileLines(char *fileName){
 // Intended to work the same way as fgets, except you can pass in the specific line number
 // of a .txt file you want it to return.
 void fgetsAtLineNum(char *stringLocation, int bufferSize, char *fileName, int lineNum){
+	// NOTE: Must take input as stringLocation input arg as &arrayname[0]
+	// NOTE Also this function will cause problems if the bufferSize you're inputting into this funcion
+	// and the actual buffersize of the string you're writing to are different.
+
 	char lineString[bufferSize] = {};
-	//char *variableOutsideTheFunction = stringLocation;
 	FILE *activeDeckFile;
+
 	activeDeckFile = fopen(fileName,"r");
 	
-	int n = 40;
-	for (int i = 0; i < lineNum ; i ++){
-		fgets(lineString,n, activeDeckFile);
+	//rewind(activeDeckFile);
+	for (int i = 1; i <= lineNum ; i ++){
+		fgets(lineString,bufferSize, activeDeckFile);
+		printf(" at i = %d, lineString = %s\n",i,lineString);
 	}
 	//printf("%c\n",lineString);
-	// i need to set the variable at the location stringLocation to linesString[0]
-	// and then probably for lineString [1] 2 3 etc...
+	
+	// sets the variable at the location stringLocation to linesString[0]
+	// and then again for lineString [1] 2 3 etc...
 	for (int i = 0; i < bufferSize ; i ++){
 		*(stringLocation + i) = lineString[i];
 	}
 	
-
-	//return "ohno";
+	//rewind(activeDeckFile);
         fclose(activeDeckFile);
-	//printf("in function %s",lineString);
+
+	// might want to add EOF functionality
 }
 
 
@@ -120,7 +126,7 @@ void testme(){
 	FILE *activeDeckFile;
 	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","r");
 	
-	char activeLine[100];
+	char activeLine[300];
 	int qNum = 2;
 	int hNum = -1;
 	int headerAndQsLocations[10][60] = {};
@@ -129,9 +135,9 @@ void testme(){
 	// this constructs an array with the locations of each header and array as it comes across them, as well as the number of questions
 	// e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
 	// headerAndQsLocations[headernumber][]=[line of header, number of questions, line number of question 1, line number of q2, etc...]
-	for (int lineNum = 0; lineNum< countFileLines("decks/PredicateLogicIntro.txt"); lineNum++){
+	for (int lineNum = 1; lineNum<= countFileLines("decks/PredicateLogicIntro.txt"); lineNum++){
 		//printf("in the loop\n");	
-		int n = 40;
+		int n = 300;
 		fgets(activeLine,n, activeDeckFile);
 		//printf("%s",activeLine);
 		if (activeLine[0] == 'h' && activeLine[1] == ':'){
@@ -159,10 +165,16 @@ void testme(){
 	
 
 	srand(time(NULL));
+
+
 	
+	hNum++;
+	//hnum is now equal to the amount of headers
+	
+	printf("hNum (amount of headers) is %d\n",hNum);
 	//go one header at a time
 	for (int i = 0; i < hNum ;i++){
-		printf("looking at header %d\n",hNum);
+		printf("looking at header %d\n",i);
 		
 		//shuffle array (but only from [i][1] onwards)
 		
@@ -187,22 +199,49 @@ void testme(){
 		}
 		//now the questions are shuffled
 		//ask question for each question in the array
-		for (int x = 2; x < headerAndQsLocations[i][1];i++){
-
-		
-
-
-
-
-		}
 
 
 	}
-	char string[60] = "eeeeeeeeee";
-	fgetsAtLineNum(&string[0],50,"decks/PredicateLogicIntro.txt",4);
-	printf("%s",string);
+
+	printf("---------------------\n");
+
+	printf("Okay the array = \n");
+
+	for (int i = 0 ; i <4 ; i++){
+		for (int j = 0 ; j < 15; j ++){
+		printf("%d ",headerAndQsLocations[i][j]);
+
+		}
+	printf("\n");
+
+	}
+
+
+
+	printf("---------------------\n");
+
+
+
+
+
+
+
+	
+	char string[300] = "eeeeeeeeee";
+	fgetsAtLineNum(&string[0],300,"decks/PredicateLogicIntro.txt",8);
+	printf("example printed string: %s\n",string);
+
+
+	// to ask questions
+	char headerString[300];
+	printf("%d",headerAndQsLocations[0][0]);
+	fgetsAtLineNum(&headerString[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][0]);
+	printf("Header: 1 %s\n", headerString);
+
 
         fclose(activeDeckFile);
+
+
 }
 
 //--------------------------- Function Selector ---------------------------
