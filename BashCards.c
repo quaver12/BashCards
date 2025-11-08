@@ -86,6 +86,20 @@ void help(){
 
 //adds questions and answers of user input to decks 
 void add(){
+	
+	// 'Deck files' will be formatted the following way for BashCards:
+	//
+	// h:This is a header - headers are asked in the order they appear in the file
+	// q:This is a question - all questions within each header are shuffled when asked with testme().
+	// a:This is the answer to the question above! Answers are specific and case sensitive at the minute.
+	//  - The line after an answer is the explanation for the answer, no specific formatting needed - everything on this line will be printed.
+	// h: Example questions
+	// q:True or False: The capital of Turkey is Constantinople.
+	// a:False
+	//  -> It's Istanbul not Constantinople!
+	// q:What was the previous name of the city now called New York.
+	// a:New Amsterdam
+	// 	- What is now known as New York was once a Dutch settlement before being taken by the English military in 1664.
 
 	FILE *activeDeckFile;
 	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","a");
