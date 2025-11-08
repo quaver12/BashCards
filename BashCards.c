@@ -17,14 +17,12 @@ int countFileLines(char *fileName){
 
     while (character != EOF){
         character = fgetc(readInFile);
-        if (character == '\n'){
+        if (character == '\n')
             lines++;
-        }
         count++;
     }
 
     fclose(readInFile);
-
     return lines;
 }
 
@@ -32,8 +30,8 @@ int countFileLines(char *fileName){
 // Intended to work the same way as fgets, except you can pass in the specific line number
 // of a .txt file you want it to return.
 void fgetsAtLineNum(char *stringLocation, int bufferSize, char *fileName, int lineNum){
-	// NOTE: Must take input as stringLocation input arg as &arrayname[0]
-	// NOTE Also this function will cause problems if the bufferSize you're inputting into this funcion
+	// NOTE: Must take stringLocation input arg as &arrayname[0]
+	// This function will cause problems if the bufferSize you're inputting into this funcion
 	// and the actual buffersize of the string you're writing to are different.
 
 	char lineString[bufferSize] = {};
@@ -41,24 +39,19 @@ void fgetsAtLineNum(char *stringLocation, int bufferSize, char *fileName, int li
 
 	activeDeckFile = fopen(fileName,"r");
 	
-	//rewind(activeDeckFile);
-	for (int i = 1; i <= lineNum ; i ++){
+	for (int i = 1; i <= lineNum ; i ++)
 		fgets(lineString,bufferSize, activeDeckFile);
-		//printf(" at i = %d, lineString = %s\n",i,lineString);
-	}
-	//printf("%c\n",lineString);
 	
 	// sets the variable at the location stringLocation to linesString[0]
 	// and then again for lineString [1] 2 3 etc...
-	for (int i = 0; i < bufferSize ; i ++){
+	for (int i = 0; i < bufferSize ; i ++)
 		*(stringLocation + i) = lineString[i];
-	}
 	
-	//rewind(activeDeckFile);
         fclose(activeDeckFile);
 
 	// might want to add EOF functionality
 }
+
 
 // Just draws a line of hyphons: made into function for ease of use.
 void drawLine(int lineLength){
@@ -82,7 +75,6 @@ void add(){
 	FILE *activeDeckFile;
 	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","a");
 
-
 	printf("Enter the question you'd like to ask! (start line with :h for header)\n");
 
 	char input[200] = {};
@@ -90,31 +82,25 @@ void add(){
 	
 	//if header tag seen only add first line
 	if (input[0]=='h' && input[1]==':'){
-		fprintf(activeDeckFile,"\n");
-		fprintf(activeDeckFile, "%s",input);
-		fprintf(activeDeckFile,"\n");
+		fprintf(activeDeckFile, "\n%s\n",input);
 			
 	//if h: not seen, prompt user for q and a
 	}else{
 
-		fprintf(activeDeckFile, "q:");
-		fprintf(activeDeckFile, "%s",input);
-
+		fprintf(activeDeckFile, "q:%s",input);
 
 		printf("Enter the specific answer you're looking for:\n");
 		fgets(input, sizeof(input), stdin);
-		fprintf(activeDeckFile, "a:");
-		fprintf(activeDeckFile, "%s",input);
+		fprintf(activeDeckFile, "a:%s",input);
 
 		printf("Enter any explanation you'd like about the answer.\n");
 		fgets(input, sizeof(input), stdin);
-		fprintf(activeDeckFile, "	- ");
-		fprintf(activeDeckFile, "%s",input);
+		fprintf(activeDeckFile, " - %s",input);
 
 
 	}
 
-	printf("Flashcard saved and editable in decks/PredicarteLogicIntro.txt\n");
+	printf("Flashcard saved and editable in decks/PredicateLogicIntro.txt\n");
 		
         fclose(activeDeckFile);
 }
@@ -126,7 +112,6 @@ void decks(){
 
 // tests user on selected deck
 void testme(){
-	printf("testme()");
 	//list available decks
 
 	//ask user which one to open
@@ -135,22 +120,18 @@ void testme(){
 	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","r");
 	
 	char activeLine[300];
-	int qNum = 2;
-	int hNum = -1;
-	int headerAndQsLocations[10][60] = {};
+	int qNum = 2, hNum = -1, headerAndQsLocations[10][60] = {};
 
-
-	// this constructs an array with the locations of each header and array as it comes across them, as well as the number of questions
+	// Constructs array with the linenumber of each header and question, as well as the number of questions
 	// e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
 	// headerAndQsLocations[headernumber][]=[line of header, number of questions, line number of question 1, line number of q2, etc...]
 	for (int lineNum = 1; lineNum<= countFileLines("decks/PredicateLogicIntro.txt"); lineNum++){
-		//printf("in the loop\n");	
 		int n = 300;
 		fgets(activeLine,n, activeDeckFile);
-		//printf("%s",activeLine);
+
 		if (activeLine[0] == 'h' && activeLine[1] == ':'){
+			//line found is a header
 			printf("header found on line %d\n",lineNum);
-			// then it's a header
 			hNum++;
 			headerAndQsLocations[hNum][0]=lineNum;
 			qNum = 2;
@@ -167,53 +148,38 @@ void testme(){
 			//so when the loop leaves and goes to the next header,
 			//headerAndQsLocations[hNum][1] will be left with the number of questions in that header
 			headerAndQsLocations[hNum][1]=qNum-2;
-			//printf("%d\n",headerAndQsLocations[hNum][qNum]);
 		}
 	}
 	
-
 	srand(time(NULL));
 
-
-	
 	hNum++;
 	//hnum is now equal to the amount of headers
 	
 	printf("hNum (amount of headers) is %d\n",hNum);
-	//go one header at a time
-	for (int i = 0; i < hNum ;i++){
-		printf("looking at header %d\n",i);
+	
+	// Shuffles all questions within each each header in the array
+	// Goes one header at a time
+	for (int header = 0; header < hNum ;header++){
+		printf("looking at header %d\n",header);
 		
 		//shuffle array (but only from [i][1] onwards)
-		
-		for (int x = 2; x < headerAndQsLocations[i][1] + 2 ; x++){
-			int temp = 0;
-			int transferTo = 0;
-			temp = headerAndQsLocations[i][x];
-			transferTo = rand() % (headerAndQsLocations[i][1]) + 2;
-			//printf("looking at digit %d of the array\n",x);
-			//printf(" temp is %d\n", temp);
-			//printf(" randomly generated address 'transferTo' is : %d\n", transferTo);
-			//printf(" value at the location of transferTo is %d\n", headerAndQsLocations[i][transferTo]);
-			//printf("values before switch: %d %d\n", headerAndQsLocations[i][x],  headerAndQsLocations[i][transferTo]);
-			headerAndQsLocations[i][x] = headerAndQsLocations[i][transferTo];
-			headerAndQsLocations[i][transferTo] = temp; 
-			//printf("values after switch: %d %d\n", headerAndQsLocations[i][x],  headerAndQsLocations[i][transferTo]);
-			//printf("%d\n",headerAndQsLocations[i][x]);
-			for (int o = 0 ; o < 20; o ++){
-				printf("%d,",headerAndQsLocations[i][o]);
+		//goes one question at a time
+		//swaps with a different question chosen at random
+		for (int question = 2; question < headerAndQsLocations[header][1] + 2 ; question++){
+			int temp = 0, transferTo = 0;
+			temp = headerAndQsLocations[header][question];
+			transferTo = rand() % (headerAndQsLocations[header][1]) + 2;
+			headerAndQsLocations[header][question] = headerAndQsLocations[header][transferTo];
+			headerAndQsLocations[header][transferTo] = temp; 
+			for (int o = 0 ; o < 20; o++){
+				printf("%d,",headerAndQsLocations[header][o]);
 			}
 			printf("\n");
 		}
-		//now the questions are shuffled
-		//ask question for each question in the array
-
-
 	}
 
-	printf("---------------------\n");
-	printf("Okay the array = \n");
-
+	printf("\nThe array for debugging:  \n");
 	for (int i = 0 ; i <4 ; i++){
 		for (int j = 0 ; j < 15; j ++){
 		printf("%d ",headerAndQsLocations[i][j]);
@@ -221,45 +187,27 @@ void testme(){
 		}
 	printf("\n");
 	}
-	printf("---------------------\n");
-
-
-
-
-
-
-
+	printf("\n");
 	
-	char string[300] = "eeeeeeeeee";
-	fgetsAtLineNum(&string[0],300,"decks/PredicateLogicIntro.txt",8);
-	printf("example printed string: %s\n",string);
-
-
 	// ASKING QUESTIONS
-	char headerString[300];
-	fgetsAtLineNum(&headerString[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][0]);
-	
-	// shift headerString left 2
-	for (int i = 0; i < 298 ; i ++){
+	// Will be reusing char activeLine[] since no longer in use
+	for (int header = 0 ; header < hNum ; header ++){
+		fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][0]);
+		
+		// Shift activeLine left 2
+		for (int i = 0; i < 298 ; i ++)
+			activeLine[i] = activeLine[i+2];
 
-		headerString[i] = headerString[i+2];
-
+		drawLine(20);
+		printf("Section %d: %s", headerAndQsLocations[0][0], activeLine);
+		drawLine(20);
+		
+		for (int question = 0 ; question < headerAndQsLocations[0][1]; question ++){
+			fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][question+2]);
+			printf("%s\n",activeLine);
+		}
 	}
-
-
-
-	drawLine(20);
-	printf("Section %d: %s", headerAndQsLocations[0][0], headerString);
-	drawLine(20);
-	
-	for (int question = 0 ; question < headerAndQsLocations[0][1]; question ++){
-		fgetsAtLineNum(&string[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][question+2]);
-		printf("%s\n",string);
-	}
-
         fclose(activeDeckFile);
-
-
 }
 
 //--------------------------- Function Selector ---------------------------
