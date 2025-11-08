@@ -44,7 +44,7 @@ void fgetsAtLineNum(char *stringLocation, int bufferSize, char *fileName, int li
 	//rewind(activeDeckFile);
 	for (int i = 1; i <= lineNum ; i ++){
 		fgets(lineString,bufferSize, activeDeckFile);
-		printf(" at i = %d, lineString = %s\n",i,lineString);
+		//printf(" at i = %d, lineString = %s\n",i,lineString);
 	}
 	//printf("%c\n",lineString);
 	
@@ -248,15 +248,14 @@ void testme(){
 
 
 
-
-
-
-
-
 	drawLine(20);
 	printf("Section %d: %s", headerAndQsLocations[0][0], headerString);
 	drawLine(20);
-
+	
+	for (int question = 0 ; question < headerAndQsLocations[0][1]; question ++){
+		fgetsAtLineNum(&string[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][question+2]);
+		printf("%s\n",string);
+	}
 
         fclose(activeDeckFile);
 
