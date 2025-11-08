@@ -93,13 +93,17 @@ void add(){
 	// q:This is a question - all questions within each header are shuffled when asked with testme().
 	// a:This is the answer to the question above! Answers are specific and case sensitive at the minute.
 	//  - The line after an answer is the explanation for the answer, no specific formatting needed - everything on this line will be printed.
+	//        Also as long as a line isn't following an answer and doesn't have a line type prefix, it will be ignored.
+	//        This means you can edit a file with comments like this.
 	// h: Example questions
 	// q:True or False: The capital of Turkey is Constantinople.
 	// a:False
 	//  -> It's Istanbul not Constantinople!
 	// q:What was the previous name of the city now called New York.
 	// a:New Amsterdam
-	// 	- What is now known as New York was once a Dutch settlement before being taken by the English military in 1664.
+	// 	- New York was once a Dutch settlement before being taken by the English military in 1664.
+
+
 
 	FILE *activeDeckFile;
 	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","a");
