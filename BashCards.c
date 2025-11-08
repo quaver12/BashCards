@@ -60,6 +60,14 @@ void fgetsAtLineNum(char *stringLocation, int bufferSize, char *fileName, int li
 	// might want to add EOF functionality
 }
 
+// Just draws a line of hyphons: made into function for ease of use.
+void drawLine(int lineLength){
+	for (int i = 0 ; i < lineLength ; i ++)
+		printf("-");
+	printf("\n");
+}
+
+
 
 //--------------------------- App Functions ---------------------------
 
@@ -204,7 +212,6 @@ void testme(){
 	}
 
 	printf("---------------------\n");
-
 	printf("Okay the array = \n");
 
 	for (int i = 0 ; i <4 ; i++){
@@ -213,11 +220,7 @@ void testme(){
 
 		}
 	printf("\n");
-
 	}
-
-
-
 	printf("---------------------\n");
 
 
@@ -232,11 +235,27 @@ void testme(){
 	printf("example printed string: %s\n",string);
 
 
-	// to ask questions
+	// ASKING QUESTIONS
 	char headerString[300];
-	printf("%d",headerAndQsLocations[0][0]);
 	fgetsAtLineNum(&headerString[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][0]);
-	printf("Header: 1 %s\n", headerString);
+	
+	// shift headerString left 2
+	for (int i = 0; i < 298 ; i ++){
+
+		headerString[i] = headerString[i+2];
+
+	}
+
+
+
+
+
+
+
+
+	drawLine(20);
+	printf("Section %d: %s", headerAndQsLocations[0][0], headerString);
+	drawLine(20);
 
 
         fclose(activeDeckFile);
