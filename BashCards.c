@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <unistd.h>
 
 // ------------------------------------------ General Utility Functions ------------------------------------------
 
@@ -63,9 +63,9 @@ void drawLine(int lineLength){
 //Shifts each element of array by amount
 	//Right if positive left if negative
 	// - leaves elements in place if no number is being shifted to it.
-	// - does not write elements beyond buffer
 	// - making shiftAmt more than buffer should on paper not do anything
-	//   - though I have not fully tested this so I do not recommend.
+	//   - I have not fully tested this so I do not recommend.
+	// - does not write elements beyond buffer
 void shiftArray(char *arrayLocation, int bufferSize, int shiftAmt){
 	// The value at location arrayLocation should be set to the value of arraylocation + shiftAmt
 	if(shiftAmt < 0){
@@ -146,18 +146,13 @@ void testme(){
 
 		if (activeLine[0] == 'h' && activeLine[1] == ':'){
 			//line found is a header
-			printf("header found on line %d\n",lineNum);
 			hNum++;
 			headerAndQsLocations[hNum][0]=lineNum;
 			qNum = 2;
-			printf(" - header linenumber (%d) written to array[%d][%d]\n",headerAndQsLocations[hNum][0],hNum,0);
 		}else if (activeLine[0] == 'q' && activeLine[1] == ':'){
 			//then it's a question	
-			printf("question found on line %d\n",lineNum);
 			headerAndQsLocations[hNum][qNum]=lineNum;
-			printf(" - question linenumber (%d) written to array[%d][%d]\n",headerAndQsLocations[hNum][qNum],hNum,qNum);
 			qNum++;
-			printf("number of questions in previous header: %d\n",qNum-2);
 
 			//writes qNum-2 to the array each time,
 			//so when the loop leaves and goes to the next header,
@@ -171,12 +166,9 @@ void testme(){
 	hNum++;
 	//hnum is now equal to the amount of headers
 	
-	printf("hNum (amount of headers) is %d\n",hNum);
-	
 	// Shuffles all questions within each each header in the array
 	// Goes one header at a time
 	for (int header = 0; header < hNum ;header++){
-		printf("looking at header %d\n",header);
 		
 		//shuffle array (but only from [i][1] onwards)
 		//goes one question at a time
@@ -187,10 +179,6 @@ void testme(){
 			transferTo = rand() % (headerAndQsLocations[header][1]) + 2;
 			headerAndQsLocations[header][question] = headerAndQsLocations[header][transferTo];
 			headerAndQsLocations[header][transferTo] = temp; 
-			for (int o = 0 ; o < 20; o++){
-				printf("%d,",headerAndQsLocations[header][o]);
-			}
-			printf("\n");
 		}
 	}
 
@@ -211,9 +199,8 @@ void testme(){
 		fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][0]);
 		
 		// Shift activeLine left 2
-		for (int i = 0; i < 298 ; i ++)
-			activeLine[i] = activeLine[i+2];
-
+		shiftArray(activeLine,300,-2);
+		
 		drawLine(20);
 		printf("Section %d: %s", headerAndQsLocations[header][0], activeLine);
 		drawLine(20);
@@ -222,16 +209,17 @@ void testme(){
 		for (int question = 0 ; question < headerAndQsLocations[header][1]; question ++){
 			//print question
 			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]);
-			printf("%s\n",activeLine);
+			// Shift activeLine left 2 - gets rid of 'q:'
+			shiftArray(activeLine,300,-2);
+			printf("%s",activeLine);
 
 			//works out correct answer
 			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+1);
-				// Shift activeLine left 2
-			for (int i = 0; i < 298 ; i ++)
-				activeLine[i] = activeLine[i+2];
+			shiftArray(activeLine,300,-2);
 			
 			//wait for user answer
 			fgets(input, sizeof(input), stdin);
+			
 
 			if (!strcmp(input,activeLine))
 				printf("Correct!\n");
@@ -241,21 +229,14 @@ void testme(){
 			}
 			// print answer explanation
 			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+2);
-			printf(activeLine);
-			drawLine(20);
+			printf("%s",activeLine);
+
+			sleep(4);
+			drawLine(40);
+
 		}
 	}
         fclose(activeDeckFile);
-
-
-	// testing shiftArray()
-	char array[8] = "01234567";
-	printf("%s\n",array);
-	shiftArray(array,8,2);
-	printf("%s\n",array);
-
-
-
 }
 
 //--------------------------- Function Selector ---------------------------
