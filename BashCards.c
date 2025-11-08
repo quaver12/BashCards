@@ -29,9 +29,8 @@ int countFileLines(char *fileName){
 
 // Intended to work the same way as fgets, except you can pass in the specific line number
 // of a .txt file you want it to return.
-void fgetsAtLineNum(char *stringLocation, int bufferSize, char *fileName, int lineNum){
-	// NOTE: Must take stringLocation input arg as &arrayname[0]
-	// This function will cause problems if the bufferSize you're inputting into this funcion
+void fgetsAtLineNum(char *string, int bufferSize, char *fileName, int lineNum){
+	// NOTE: This function will cause problems if the bufferSize you're inputting into this funcion
 	// and the actual buffersize of the string you're writing to are different.
 
 	char lineString[bufferSize] = {};
@@ -45,7 +44,7 @@ void fgetsAtLineNum(char *stringLocation, int bufferSize, char *fileName, int li
 	// sets the variable at the location stringLocation to linesString[0]
 	// and then again for lineString [1] 2 3 etc...
 	for (int i = 0; i < bufferSize ; i ++)
-		*(stringLocation + i) = lineString[i];
+		*(string + i) = lineString[i];
 	
         fclose(activeDeckFile);
 
@@ -61,6 +60,22 @@ void drawLine(int lineLength){
 }
 
 
+//Shifts each element of array by amount
+	//Right if positive left if negative
+	// - leaves elements in place if no number is being shifted to it.
+	// - does not write elements beyond buffer
+	// - making shiftAmt more than buffer should on paper not do anything
+	//   - though I have not fully tested this so I do not recommend.
+void shiftArray(char *arrayLocation, int bufferSize, int shiftAmt){
+	// The value at location arrayLocation should be set to the value of arraylocation + shiftAmt
+	if(shiftAmt < 0){
+		for (int i = shiftAmt; i < bufferSize ; i++)
+			*(arrayLocation + i + shiftAmt) = *(arrayLocation + i);
+	}else{
+		for (int i = (bufferSize-shiftAmt-1); i >= 0 ; i--)
+			*(arrayLocation + i + shiftAmt) = *(arrayLocation + i);
+	}
+}
 
 //--------------------------- App Functions ---------------------------
 
@@ -193,7 +208,7 @@ void testme(){
 	// Will be reusing char activeLine[] since no longer in use
 	char input[300];
 	for (int header = 0 ; header < hNum ; header ++){
-		fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][0]);
+		fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][0]);
 		
 		// Shift activeLine left 2
 		for (int i = 0; i < 298 ; i ++)
@@ -206,11 +221,11 @@ void testme(){
 
 		for (int question = 0 ; question < headerAndQsLocations[header][1]; question ++){
 			//print question
-			fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]);
+			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]);
 			printf("%s\n",activeLine);
 
 			//works out correct answer
-			fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+1);
+			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+1);
 				// Shift activeLine left 2
 			for (int i = 0; i < 298 ; i ++)
 				activeLine[i] = activeLine[i+2];
@@ -225,12 +240,22 @@ void testme(){
 				printf("The correct answer was: %s", activeLine);
 			}
 			// print answer explanation
-			fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+2);
+			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+2);
 			printf(activeLine);
 			drawLine(20);
 		}
 	}
         fclose(activeDeckFile);
+
+
+	// testing shiftArray()
+	char array[8] = "01234567";
+	printf("%s\n",array);
+	shiftArray(array,8,2);
+	printf("%s\n",array);
+
+
+
 }
 
 //--------------------------- Function Selector ---------------------------
