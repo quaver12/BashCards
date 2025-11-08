@@ -191,20 +191,43 @@ void testme(){
 	
 	// ASKING QUESTIONS
 	// Will be reusing char activeLine[] since no longer in use
+	char input[300];
 	for (int header = 0 ; header < hNum ; header ++){
-		fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][0]);
+		fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][0]);
 		
 		// Shift activeLine left 2
 		for (int i = 0; i < 298 ; i ++)
 			activeLine[i] = activeLine[i+2];
 
 		drawLine(20);
-		printf("Section %d: %s", headerAndQsLocations[0][0], activeLine);
+		printf("Section %d: %s", headerAndQsLocations[header][0], activeLine);
 		drawLine(20);
-		
-		for (int question = 0 ; question < headerAndQsLocations[0][1]; question ++){
-			fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[0][question+2]);
+	
+
+		for (int question = 0 ; question < headerAndQsLocations[header][1]; question ++){
+			//print question
+			fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]);
 			printf("%s\n",activeLine);
+
+			//works out correct answer
+			fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+1);
+				// Shift activeLine left 2
+			for (int i = 0; i < 298 ; i ++)
+				activeLine[i] = activeLine[i+2];
+			
+			//wait for user answer
+			fgets(input, sizeof(input), stdin);
+
+			if (!strcmp(input,activeLine))
+				printf("Correct!\n");
+			else{
+				printf("Incorrect :(\n");
+				printf("The correct answer was: %s", activeLine);
+			}
+			// print answer explanation
+			fgetsAtLineNum(&activeLine[0],300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+2);
+			printf(activeLine);
+			drawLine(20);
 		}
 	}
         fclose(activeDeckFile);
