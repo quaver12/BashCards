@@ -75,6 +75,18 @@ void shiftArray(char *arrayLocation, int bufferSize, int shiftAmt){
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 //--------------------------- App Functions ---------------------------
 
 // Incomplete
@@ -145,15 +157,28 @@ void decks(){
 void testme(){
 	//list available decks
 
-	
-	
 	//ask user which one to open
+	// --------------------- very proprietry deck chooser ----------------------
+	char activeDeckName[300];
+	printf("Which deck file from /decks would you like to open?\n");
+	
+	scanf("%s",&activeDeckName);
 
+	//add "decks/" to beginning of input
+	shiftArray(activeDeckName,300,6);
+	for (int i = 0 ; i < 6 ; i++){
+		activeDeckName[i] = "decks/"[i];
+
+	}
+
+	printf("%s",activeDeckName);
+
+	
 
 
 	//using test example eck for time being.
 	FILE *activeDeckFile;
-	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","r");
+	activeDeckFile = fopen(activeDeckName,"r");
 	
 	char activeLine[300];
 	int qNum = 2, hNum = -1, headerAndQsLocations[10][60] = {};
@@ -161,7 +186,7 @@ void testme(){
 	// Constructs array with the linenumber of each header and question, as well as the number of questions
 	// e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
 	// headerAndQsLocations[headernumber][]=[line of header, number of questions, line number of question 1, line number of q2, etc...]
-	for (int lineNum = 1; lineNum<= countFileLines("decks/PredicateLogicIntro.txt"); lineNum++){
+	for (int lineNum = 1; lineNum<= countFileLines(activeDeckName); lineNum++){
 		int n = 300;
 		fgets(activeLine,n, activeDeckFile);
 
@@ -213,11 +238,11 @@ void testme(){
 	}
 	printf("\n");
 	
-	// ASKING QUESTIONS
-	// Will be reusing char activeLine[] since no longer in use
 	char input[300];
+	// ASKING QUESTIONS
+	// Will be reusing char activeLine[]  since no longer in use
 	for (int header = 0 ; header < hNum ; header ++){
-		fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][0]);
+		fgetsAtLineNum(activeLine,300,activeDeckName,headerAndQsLocations[header][0]);
 		
 		// Shift activeLine left 2
 		shiftArray(activeLine,300,-2);
@@ -229,13 +254,13 @@ void testme(){
 
 		for (int question = 0 ; question < headerAndQsLocations[header][1]; question ++){
 			//print question
-			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]);
+			fgetsAtLineNum(activeLine,300,activeDeckName,headerAndQsLocations[header][question+2]);
 			// Shift activeLine left 2 - gets rid of 'q:'
 			shiftArray(activeLine,300,-2);
 			printf("%s",activeLine);
 
 			//works out correct answer
-			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+1);
+			fgetsAtLineNum(activeLine,300,activeDeckName,headerAndQsLocations[header][question+2]+1);
 			shiftArray(activeLine,300,-2);
 			
 			//wait for user answer
@@ -249,7 +274,7 @@ void testme(){
 				printf("The correct answer was: %s", activeLine);
 			}
 			// print answer explanation
-			fgetsAtLineNum(activeLine,300,"decks/PredicateLogicIntro.txt",headerAndQsLocations[header][question+2]+2);
+			fgetsAtLineNum(activeLine,300,activeDeckName,headerAndQsLocations[header][question+2]+2);
 			printf("%s",activeLine);
 
 			sleep(4);
