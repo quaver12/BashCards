@@ -13,13 +13,11 @@ int countFileLines(char *fileName){
     FILE *readInFile;
     readInFile = fopen(fileName,"r");
 
-    int count = 0, lines = 0, character;
+    int lines = 0, character;
 
-    while (character != EOF){
-        character = fgetc(readInFile);
+    while ((character = fgetc(readInFile)) != EOF){
         if (character == '\n')
             lines++;
-        count++;
     }
 
     fclose(readInFile);
@@ -147,8 +145,13 @@ void decks(){
 void testme(){
 	//list available decks
 
+	
+	
 	//ask user which one to open
-	//using test example deck for time being.
+
+
+
+	//using test example eck for time being.
 	FILE *activeDeckFile;
 	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","r");
 	
