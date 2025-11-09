@@ -77,14 +77,31 @@ void shiftArray(char *arrayLocation, int bufferSize, int shiftAmt){
 
 
 
+//proprietry fuzzy matcher - checks if userAns is close enough to correctAns
+//returns true or false
+int isCorrect(const char userAns[], const char correctAns[], int uaLen, int caLen){
+	//if character in userAns is present in correctAns, increase score by 1
+	//if at the end score is at least 75% of the correctanswer's length, return true
+	int score = 0;
+
+	for (int i = 0 ; i < uaLen ; i ++){
+		for (int j = 0 ; j < caLen ; j++){
+			if (userAns[i] == correctAns[j]){
+				score++;
+				j = caLen;
+			}
+		}
+	}
+	printf("score is: %d\n", score);
 
 
+	if (score>=((caLen/4)*3))
+		return true;
+	else
+		return false;
 
-
-
-
-
-
+	
+}
 
 
 //--------------------------- App Functions ---------------------------
@@ -156,6 +173,10 @@ void decks(){
 // tests user on selected deck
 void testme(){
 	//list available decks
+	if (isCorrect("predicates and relations","Properties and Relations",24,24))
+		printf("isCorrect returned true!!\n");
+
+
 
 	//ask user which one to open
 	// --------------------- very proprietry deck chooser ----------------------
@@ -176,7 +197,6 @@ void testme(){
 	
 
 
-	//using test example eck for time being.
 	FILE *activeDeckFile;
 	activeDeckFile = fopen(activeDeckName,"r");
 	
@@ -248,7 +268,7 @@ void testme(){
 		shiftArray(activeLine,300,-2);
 		
 		drawLine(20);
-		printf("Section %d: %s", headerAndQsLocations[header][0], activeLine);
+		printf("Section %d: %s", header+1, activeLine);
 		drawLine(20);
 	
 
@@ -290,13 +310,12 @@ void testme(){
 
 int main(int argc, char *argv[]){
 
-
     if (argc == 1){
         //help
 	help();
 
     }else if (strcmp(argv[1],"add")==0){
-        //add
+        //add to existing deck of flashcards or make a new one!
 	add();
 
     }else if (strcmp(argv[1],"testme")==0){
