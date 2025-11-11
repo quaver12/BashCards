@@ -129,11 +129,22 @@ void add(){
 	// q:What was the previous name of the city now called New York.
 	// a:New Amsterdam
 	// 	- New York was once a Dutch settlement before being taken by the English military in 1664.
+	
+	char activeDeckName[300];
+	printf("Which deck file from /decks would you like to add to?\nInputting unregonised file name will make a new deck with that name.\n");
+	
+	scanf("%s",&activeDeckName);
 
+	//add "decks/" to beginning of input
+	shiftArray(activeDeckName,300,6);
+	for (int i = 0 ; i < 6 ; i++){
+		activeDeckName[i] = "decks/"[i];
+
+	}
 
 
 	FILE *activeDeckFile;
-	activeDeckFile = fopen("decks/PredicateLogicIntro.txt","a");
+	activeDeckFile = fopen(activeDeckName,"a");
 
 	printf("Enter the question you'd like to ask! (start line with :h for header)\n");
 
@@ -160,7 +171,7 @@ void add(){
 
 	}
 
-	printf("Flashcard saved and editable in decks/PredicateLogicIntro.txt\n");
+	printf("Flashcard saved and editable in %s\n",activeDeckName);
 		
         fclose(activeDeckFile);
 }
@@ -173,8 +184,8 @@ void decks(){
 // tests user on selected deck
 void testme(){
 	//list available decks
-	if (isCorrect("predicates and relations","Properties and Relations",24,24))
-		printf("isCorrect returned true!!\n");
+	//if (isCorrect("predicates and relations","Properties and Relations",24,24))
+	//	printf("isCorrect returned true!!\n");
 
 
 
@@ -192,7 +203,7 @@ void testme(){
 
 	}
 
-	printf("%s",activeDeckName);
+	//printf("%s",activeDeckName);
 
 	
 
@@ -248,6 +259,7 @@ void testme(){
 		}
 	}
 
+	/*
 	printf("\nThe array for debugging:  \n");
 	for (int i = 0 ; i <4 ; i++){
 		for (int j = 0 ; j < 15; j ++){
@@ -257,6 +269,7 @@ void testme(){
 	printf("\n");
 	}
 	printf("\n");
+	*/
 	
 	char input[300];
 	// ASKING QUESTIONS

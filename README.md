@@ -1,6 +1,11 @@
 Small CLI-based flashcards to both practice writing C, and use for revision down the line.
 
-Install with:
+
+*Linux*
+Run the following whereever you'd like to store the files:
 ```
-(Work in progress)
+git clone https://github.com/quaver12/BashCards.git
+cd BashCards
 ```
+
+work in progress
