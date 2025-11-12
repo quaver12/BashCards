@@ -103,6 +103,12 @@ int isCorrect(const char userAns[], const char correctAns[], int uaLen, int caLe
 	
 }
 
+void command(int arg1,int arg2, int *array, int *q, int *h){
+
+	printf("Command seen\n");
+
+}
+
 
 //--------------------------- App Functions ---------------------------
 
@@ -129,7 +135,28 @@ void add(){
 	// q:What was the previous name of the city now called New York.
 	// a:New Amsterdam
 	// 	- New York was once a Dutch settlement before being taken by the English military in 1664.
+
+	//----------------Linux implementation-------------------
+	char deckFilesLocation[300];
+	char configFileLocation[300];
+	char *homeDirectory = getenv("HOME");
+	FILE *configFile;
+
+	//append the homedirectory and ".config/bashcards/decksavelocation" to configfilelocation
 	
+	strcat(configFileLocation,homeDirectory);
+	strcat(configFileLocation,"/.config/bashcards/decksavelocation");
+
+	//open the config file with the deck save locations
+	printf("%s\n",configFileLocation);
+	configFile = fopen(configFileLocation,"r");
+
+	fgets(deckFilesLocation,300,configFile);
+	fclose(configFile);
+	printf("%s\n",deckFilesLocation);
+	//printf("deckFilesLocation is len: %d",strlen(deckFilesLocation));
+	
+
 	char activeDeckName[300];
 	printf("Which deck file from /decks would you like to add to?\nInputting unregonised file name will make a new deck with that name.\n");
 	
@@ -280,9 +307,9 @@ void testme(){
 		// Shift activeLine left 2
 		shiftArray(activeLine,300,-2);
 		
-		drawLine(20);
+		drawLine(100);
 		printf("Section %d: %s", header+1, activeLine);
-		drawLine(20);
+		drawLine(100);
 	
 
 		for (int question = 0 ; question < headerAndQsLocations[header][1]; question ++){
@@ -299,8 +326,10 @@ void testme(){
 			//wait for user answer
 			fgets(input, sizeof(input), stdin);
 			
-
-			if (!strcmp(input,activeLine))
+			if (input[0]==':')
+				printf("command time\n");
+			//	command(input[1],input[2],headerAndQsLocations,&question,&header);
+			else if (!strcmp(input,activeLine))
 				printf("Correct!\n");
 			else{
 				printf("Incorrect :(\n");
@@ -311,7 +340,7 @@ void testme(){
 			printf("%s",activeLine);
 
 			sleep(4);
-			drawLine(40);
+			drawLine(100);
 
 		}
 	}
