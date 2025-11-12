@@ -75,6 +75,17 @@ void shiftArray(char *arrayLocation, int bufferSize, int shiftAmt){
 	}
 }
 
+//replaces the first \n found in string with \0
+void nto0(char *string){
+
+	int count = 0;
+	while(string[count]){
+		if (string[count] == '\n')
+			string[count] = '\0';
+		count++;
+		//printf("count is %d\n", count);
+	}
+}
 
 
 //proprietry fuzzy matcher - checks if userAns is close enough to correctAns
@@ -127,13 +138,7 @@ void findDecks(char *output){
 	//printf("Deck Files stored at: %s\n",deckFilesLocation);
 	
 	//remove "\n from deckslocation"
-	int count = 0;
-	while(deckFilesLocation[count]){
-		if (deckFilesLocation[count] == '\n')
-			deckFilesLocation[count] = '\0';
-		count++;
-		//printf("count is %d\n", count);
-	}
+	nto0(deckFilesLocation);
 
 	//printf("deck files location %s",deckFilesLocation);
 	strcpy(output,deckFilesLocation);
@@ -177,8 +182,6 @@ void add(){
 	char decksLocation[300];
 	findDecks(decksLocation);
 	
-	printf("speaking from add(): decks are in %s\n",decksLocation);
-
 	char activeDeckName[300];
 	printf("Which deck file from /decks would you like to add to?\nInputting unregonised file name will make a new deck with that name.\n");
 
@@ -189,16 +192,13 @@ void add(){
 	strcat(activeDeckName,"/");
 	strcat(activeDeckName,input);
 
-	printf("so we open %s\n", activeDeckName);
-
-	//add "decks/" to beginning of input
+	printf("Opening %s...\n", activeDeckName);
 
 	FILE *activeDeckFile;
 	activeDeckFile = fopen(activeDeckName,"a");
 
 	printf("Enter the question you'd like to ask! (start line with :h for header)\n");
-
-	//char input[300] = {};
+	
 	fgets(input, sizeof(input), stdin);
 	
 	//if header tag seen only add first line
@@ -242,22 +242,19 @@ void testme(){
 	char decksLocation[300];
 	findDecks(decksLocation);
 	
-	printf("speaking from add(): decks are in %s\n",decksLocation);
-
 	char activeDeckName[300];
-	printf("Which deck file would you like to be tested on? Please enter full file name");
+	printf("Which deck file would you like to be tested on? Please enter full file name: ");
 
 	char input[300];
-	scanf("%s",&input);
+	fgets(input, sizeof(input), stdin);
 
 	strcat(activeDeckName,decksLocation);
 	strcat(activeDeckName,"/");
 	strcat(activeDeckName,input);
 
-	printf("so we open %s\n", activeDeckName);
-
-
+	nto0(activeDeckName);
 	
+	printf("Opening %s...\n", activeDeckName);
 
 
 	FILE *activeDeckFile;
