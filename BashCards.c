@@ -103,6 +103,44 @@ int isCorrect(const char userAns[], const char correctAns[], int uaLen, int caLe
 	
 }
 
+void findDecks(char *output){
+
+	//----------------Linux implementation-------------------
+	char deckFilesLocation[300] = {};
+	char configFileLocation[300] = {};
+	char *homeDirectory = getenv("HOME");
+	FILE *configFile;
+
+	//append the homedirectory and ".config/bashcards/decksavelocation" to theconfigfilelocation
+	
+	//printf("homeDir: %s\n",homeDirectory);
+
+	strcat(configFileLocation,homeDirectory);
+	strcat(configFileLocation,"/.config/bashcards/decksavelocation");
+	
+	//open the config file with the deck save locations
+	//printf("Config File Location: %s\n",configFileLocation);
+	configFile = fopen(configFileLocation,"r");
+
+	fgets(deckFilesLocation,300,configFile);
+	fclose(configFile);
+	//printf("Deck Files stored at: %s\n",deckFilesLocation);
+	
+	//remove "\n from deckslocation"
+	int count = 0;
+	while(deckFilesLocation[count]){
+		if (deckFilesLocation[count] == '\n')
+			deckFilesLocation[count] = '\0';
+		count++;
+		//printf("count is %d\n", count);
+	}
+
+	//printf("deck files location %s",deckFilesLocation);
+	strcpy(output,deckFilesLocation);
+}
+
+
+
 void command(int arg1,int arg2, int *array, int *q, int *h){
 
 	printf("Command seen\n");
@@ -136,46 +174,31 @@ void add(){
 	// a:New Amsterdam
 	// 	- New York was once a Dutch settlement before being taken by the English military in 1664.
 
-	//----------------Linux implementation-------------------
-	char deckFilesLocation[300];
-	char configFileLocation[300];
-	char *homeDirectory = getenv("HOME");
-	FILE *configFile;
-
-	//append the homedirectory and ".config/bashcards/decksavelocation" to configfilelocation
+	char decksLocation[300];
+	findDecks(decksLocation);
 	
-	strcat(configFileLocation,homeDirectory);
-	strcat(configFileLocation,"/.config/bashcards/decksavelocation");
-
-	//open the config file with the deck save locations
-	printf("%s\n",configFileLocation);
-	configFile = fopen(configFileLocation,"r");
-
-	fgets(deckFilesLocation,300,configFile);
-	fclose(configFile);
-	printf("%s\n",deckFilesLocation);
-	//printf("deckFilesLocation is len: %d",strlen(deckFilesLocation));
-	
+	printf("speaking from add(): decks are in %s\n",decksLocation);
 
 	char activeDeckName[300];
 	printf("Which deck file from /decks would you like to add to?\nInputting unregonised file name will make a new deck with that name.\n");
-	
-	scanf("%s",&activeDeckName);
+
+	char input[300];
+	scanf("%s",&input);
+
+	strcat(activeDeckName,decksLocation);
+	strcat(activeDeckName,"/");
+	strcat(activeDeckName,input);
+
+	printf("so we open %s\n", activeDeckName);
 
 	//add "decks/" to beginning of input
-	shiftArray(activeDeckName,300,6);
-	for (int i = 0 ; i < 6 ; i++){
-		activeDeckName[i] = "decks/"[i];
-
-	}
-
 
 	FILE *activeDeckFile;
 	activeDeckFile = fopen(activeDeckName,"a");
 
 	printf("Enter the question you'd like to ask! (start line with :h for header)\n");
 
-	char input[200] = {};
+	//char input[300] = {};
 	fgets(input, sizeof(input), stdin);
 	
 	//if header tag seen only add first line
@@ -216,21 +239,23 @@ void testme(){
 
 
 
-	//ask user which one to open
-	// --------------------- very proprietry deck chooser ----------------------
-	char activeDeckName[300];
-	printf("Which deck file from /decks would you like to open?\n");
+	char decksLocation[300];
+	findDecks(decksLocation);
 	
-	scanf("%s",&activeDeckName);
+	printf("speaking from add(): decks are in %s\n",decksLocation);
 
-	//add "decks/" to beginning of input
-	shiftArray(activeDeckName,300,6);
-	for (int i = 0 ; i < 6 ; i++){
-		activeDeckName[i] = "decks/"[i];
+	char activeDeckName[300];
+	printf("Which deck file would you like to be tested on? Please enter full file name");
 
-	}
+	char input[300];
+	scanf("%s",&input);
 
-	//printf("%s",activeDeckName);
+	strcat(activeDeckName,decksLocation);
+	strcat(activeDeckName,"/");
+	strcat(activeDeckName,input);
+
+	printf("so we open %s\n", activeDeckName);
+
 
 	
 
@@ -298,7 +323,6 @@ void testme(){
 	printf("\n");
 	*/
 	
-	char input[300];
 	// ASKING QUESTIONS
 	// Will be reusing char activeLine[]  since no longer in use
 	for (int header = 0 ; header < hNum ; header ++){
