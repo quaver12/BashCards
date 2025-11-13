@@ -7,7 +7,7 @@ Run the following whereever you'd like to store the files:
 ```
 git clone https://github.com/quaver12/BashCards.git
 cd BashCards
-sh /BashCards/install.sh
+sh install.sh
 ```
 
 work in progress
