@@ -1,0 +1,54 @@
+h:Types of Sets
+
+q:What is the name given to the following set? A = {}
+a: The Empty Set
+    The empty Set can also be written as a o with a cross through it.
+q:Two sets have no elements in common. What is the name given to these sets?
+a:Disjoint sets
+    -   The intersection of two disjoint sets is always the empty set!
+q:True or False? the following sets are equal: A={4,3,9} B ={9,4,3}
+a:True!
+ - Order does not matter for sets, so as they both contain all the exact same elements, A=B.
+q:What does |A| equal if A={3,5,7}?
+a:3
+ - The Cardinality of a set is how many elements are in it. It is written |A|.
+q:True or False: If A = {{}}, A = the empty set.
+a:False
+ - A is not empty - it contains 1 set that is empty! Therefore A = {the empty set}
+q:In a set of letters, how can we denote the set that contains the full alphabet.
+a:U
+    -   U, the Universal set, contains all possible elements in a scenario. If we are dealing with letters U would therefore be equal to {the alphabet}
+q:Given A is a set and U is the universal set, what is another way of writing U-A
+a: comp(A)
+    - The 'Complement' of a given set is equal to U-the given set. This is written comp(set).
+q: if A = {7,4,6,9} and B = {6,4}, which set is the subset of the other?
+a:B
+ - Every value of B is in A, but not every value of A is in B.
+q:True or False: a set is a subset of itself
+a:True
+    -   For example: Each element of set A is in set - therefore it is a subset of itself.
+q:True or False: a set is a proper subset of itself
+a:False
+    -   A 'proper subset' is the same in all regards as a 'subset', apart from the fact that a set cannot be a proper subset of itself.
+q:X = {a,d,g,e} Y = {g,a}. Is X a subset or superset of Y?
+a:Superset
+
+
+h:Relations of Sets
+q:True or False: if A = {1,2,3,4}, and the Relation R = {<1,1>,<2,2>,<3,3>}, then R is reflexive.
+a:False
+ To be reflexive, a relation has to contain a pair of EVERY element in the set. R would also need to contain <4,4> to be reflexive.
+q:What extra ordered pair does the following set need to be transitive: R = {<1,1>,<1,2>,<1,4>,<2,1>,<2,2>,<3,3>,<4,1>,<4,4>}
+a:<4,2>
+ Since both <4,1> and <1,2> are present in the relation, R would also need <4,2> to be considered transitive.
+q:Is the relation '<' transitive, reflexive and/or symmetric.
+a:Only transitive
+- Take the set A = {1,2,3}. The relation < between set A and itself = {<1,2>,<2,3>,<1,3>}
+q:True or False: For the set A = {x,y,z}, the Relation R = {<x,x>,<z,z>,<y,z>,<y,y>} is relfexive
+a:True
+ - The relation contains pairs of every element in A, making it reflexive - it doesn't matter if another ordered pair (e.g. <y,z>) is present, it retains this trait.
+q:Let A = {x,y,z} and R = {<z,z>}. True or False: R is transitive.
+a:True
+ - For every value of <a,b> and <b,c>, then <a,c> appears. Considering <a,b> = <z,z>, and <b,c> = <z,z>, R would also need <z,z> (<a,c>) to be transitive. Hang on it does!
+q:If a relation is a reflexive, transitive, and symmetric relation, what can we also say it is.
+a:An equivalence relation
