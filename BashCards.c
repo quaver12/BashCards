@@ -159,7 +159,7 @@ void command(int arg1,int arg2, int *array, int *q, int *h){
 
 
 void listAvailableDecks(){
-	//----------------------------------Linux Implementation--------------------------------------
+	//---------------Linux Implementation-------------------
 	char decksLocation[300];
 	findDecks(decksLocation);
 	printf("Downloaded decks available at %s are as follows:\n\n",decksLocation);
@@ -176,12 +176,6 @@ void listAvailableDecks(){
 	printf("\nIf you wish to change your deck save location please go to ~/.config/bashcards/decksavelocation\n");
 	drawLine (100);
 }
-
-
-
-
-
-
 
 
 //--------------------------- App Functions ---------------------------
@@ -292,7 +286,8 @@ void testme(){
 	if(!(activeDeckFile = fopen(activeDeckName,"r"))){
 		printf("Unable to locate that file\n");
 		return;
-	}	
+	}else
+	printf("Succesffully opened!\n");
 	
 	char activeLine[300];
 	int qNum = 2, hNum = -1, headerAndQsLocations[10][60] = {};
@@ -354,6 +349,15 @@ void testme(){
 	printf("\n");
 	*/
 	
+	//prints headers
+	printf("\n%s",input);
+	char headerForPrinting[300];
+	for (int i = 0 ; i < hNum ; i++){
+		fgetsAtLineNum(headerForPrinting,300,activeDeckName,headerAndQsLocations[i][0]);
+		printf(" - Section %d: %s", i+1, headerForPrinting);
+	}
+	printf("\nSkip to desired header by typing :h + header number when prompted to answer a question.\nE.g :h2\n");
+
 	// ASKING QUESTIONS
 	// Will be reusing char activeLine[]  since no longer in use
 	for (int header = 0 ; header < hNum ; header ++){
@@ -381,10 +385,11 @@ void testme(){
 			//wait for user answer
 			fgets(input, sizeof(input), stdin);
 			
-			if (input[0]==':')
-				printf("command time\n");
-			//	command(input[1],input[2],headerAndQsLocations,&question,&header);
-			else if (!strcmp(input,activeLine))
+			if (input[0]==':'&&input[1]=='h'){
+				printf("Skipping to header %c. Give me 4 seconds.\n",input[2]);
+				question = headerAndQsLocations[header][1];
+				header = input[2]-2-'0';
+			}else if (!strcmp(input,activeLine))
 				printf("Correct!\n");
 			else{
 				printf("Incorrect :(\n");
