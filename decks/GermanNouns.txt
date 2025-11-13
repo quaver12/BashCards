@@ -1,0 +1,52 @@
+h:Translate the following household objects:
+q:the fork
+a:die Gabel
+ -
+q:the knife
+a:das Messer
+ -
+q:
+a:
+ -
+
+
+
+h:Places in town
+
+
+q:the cinema
+a:das Kino
+ -
+q:the pharmacy
+a:die Apotheke
+ -
+q:the bank
+a:die Bank
+ -
+q:the train station
+a:der Bahnhof
+ -
+q:the airport
+a:der Flughafen
+ -
+q:the hospital
+a:das Krankenhaus
+ -
+q:the park
+a:der Park
+ -
+q:the swimming pool
+a:das Schwimmbad
+ -
+q:the supermarket
+a:der Supermarkt
+ -
+q:the gym
+a:das Fitnessstudio
+ -
+q:the shop
+a:das Geschaft
+ -
+q:the Pub
+a:die Kneipe
+ -
