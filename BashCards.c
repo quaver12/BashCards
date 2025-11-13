@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-
+#include <dirent.h>
 // ------------------------------------------ General Utility Functions ------------------------------------------
 
 // Returns number of lines in a .txt file
@@ -11,8 +11,11 @@ int countFileLines(char *fileName){
     // Counts numbers of lines in txt file by counting number of '\n's used.
 
     FILE *readInFile;
-    readInFile = fopen(fileName,"r");
-
+    if(!(readInFile = fopen(fileName,"r"))){
+	printf("Failed to open %s during countFileLines.",fileName);
+	return 0;
+    }
+	
     int lines = 0, character;
 
     while ((character = fgetc(readInFile)) != EOF){
@@ -155,6 +158,32 @@ void command(int arg1,int arg2, int *array, int *q, int *h){
 }
 
 
+void listAvailableDecks(){
+	//----------------------------------Linux Implementation--------------------------------------
+	char decksLocation[300];
+	findDecks(decksLocation);
+	printf("Downloaded decks available at %s are as follows:\n\n",decksLocation);
+
+	DIR *decksDirectory;
+	decksDirectory = opendir(decksLocation);
+	struct dirent* individualFiles;
+
+	while (individualFiles = readdir(decksDirectory)){
+		printf(" - %s\n",individualFiles->d_name);
+	}
+
+	closedir(decksDirectory);
+	printf("\nIf you wish to change your deck save location please go to ~/.config/bashcards/decksavelocation\n");
+	drawLine (100);
+}
+
+
+
+
+
+
+
+
 //--------------------------- App Functions ---------------------------
 
 // Incomplete
@@ -239,7 +268,7 @@ void testme(){
 	//if (isCorrect("predicates and relations","Properties and Relations",24,24))
 	//	printf("isCorrect returned true!!\n");
 
-
+	listAvailableDecks();
 
 	char decksLocation[300];
 	findDecks(decksLocation);
