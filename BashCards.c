@@ -131,8 +131,9 @@ void findDecks(char *output){
 	
 	//open the config file with the deck save locations
 	//printf("Config File Location: %s\n",configFileLocation);
-	configFile = fopen(configFileLocation,"r");
-
+	if (!(configFile = fopen(configFileLocation,"r")))
+		printf("Failed to Locate config file 'decksavelocation'.");
+	else{
 	fgets(deckFilesLocation,300,configFile);
 	fclose(configFile);
 	//printf("Deck Files stored at: %s\n",deckFilesLocation);
@@ -142,6 +143,7 @@ void findDecks(char *output){
 
 	//printf("deck files location %s",deckFilesLocation);
 	strcpy(output,deckFilesLocation);
+	}
 }
 
 
@@ -258,7 +260,10 @@ void testme(){
 
 
 	FILE *activeDeckFile;
-	activeDeckFile = fopen(activeDeckName,"r");
+	if(!(activeDeckFile = fopen(activeDeckName,"r"))){
+		printf("Unable to locate that file\n");
+		return;
+	}	
 	
 	char activeLine[300];
 	int qNum = 2, hNum = -1, headerAndQsLocations[10][60] = {};
