@@ -50,86 +50,85 @@ int main(int argc, char *argv[]){
 
 // tests user on selected deck
 void testme(){
-	//list available decks
-	//if (isCorrect("predicates and relations","Properties and Relations",24,24))
-	//	printf("isCorrect returned true!!\n");
-    
+    //list available decks
+    //if (isCorrect("predicates and relations","Properties and Relations",24,24))
+    //	printf("isCorrect returned true!!\n");
 
 
-	listAvailableDecks();
+    listAvailableDecks();
 
-	char decksLocation[BUFFSIZE];
-	findDecks(decksLocation);
-	
-	char activeDeckName[BUFFSIZE];
-	printf("Which deck file would you like to be tested on? Please enter full file name: ");
+    char decksLocation[BUFFSIZE];
+    findDecks(decksLocation);
 
-	char input[BUFFSIZE];
-	fgets(input, sizeof(input), stdin);
+    char activeDeckName[BUFFSIZE];
+    printf("Which deck file would you like to be tested on? Please enter full file name: ");
 
-	strcat(activeDeckName,decksLocation);
-	strcat(activeDeckName,"/");
-	strcat(activeDeckName,input);
+    char input[BUFFSIZE];
+    fgets(input, sizeof(input), stdin);
 
-	newLineToNull(activeDeckName);
-	
-	printf("Opening %s...\n", activeDeckName);
+    strcat(activeDeckName,decksLocation);
+    strcat(activeDeckName,"/");
+    strcat(activeDeckName,input);
+
+    newLineToNull(activeDeckName);
+
+    printf("Opening %s...\n", activeDeckName);
 
 
-	FILE *activeDeckFile;
-	if(!(activeDeckFile = fopen(activeDeckName,"r"))){
-		printf("Unable to locate that file\n");
-		return;
-	}else
-	printf("Succesffully opened!\n");
-	
-	char activeLine[BUFFSIZE];
-	int qNum = 2, hNum = -1, headerAndQsLocations[10][60] = {};
+    FILE *activeDeckFile;
+    if(!(activeDeckFile = fopen(activeDeckName,"r"))){
+        printf("Unable to locate that file\n");
+        return;
+    }else
+    printf("Succesffully opened!\n");
 
-	// Constructs array with the linenumber of each header and question, as well as the number of questions
-	// e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
-	// headerAndQsLocations[headernumber][]=[line of header, number of questions, line number of question 1, line number of q2, etc...]
-	for (int lineNum = 1; lineNum<= countFileLines(activeDeckName); lineNum++){
-		int n = BUFFSIZE;
-		fgets(activeLine,n, activeDeckFile);
+    char activeLine[BUFFSIZE];
+    int qNum = 2, hNum = -1, headerAndQsLocations[10][60] = {};
 
-		if (activeLine[0] == 'h' && activeLine[1] == ':'){
-			//line found is a header
-			hNum++;
-			headerAndQsLocations[hNum][0]=lineNum;
-			qNum = 2;
-		}else if (activeLine[0] == 'q' && activeLine[1] == ':'){
-			//then it's a question	
-			headerAndQsLocations[hNum][qNum]=lineNum;
-			qNum++;
+    // Constructs array with the linenumber of each header and question, as well as the number of questions
+    // e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
+    // headerAndQsLocations[headernumber][]=[line of header, number of questions, line number of question 1, line number of q2, etc...]
+    for (int lineNum = 1; lineNum<= countFileLines(activeDeckName); lineNum++){
+        int n = BUFFSIZE;
+        fgets(activeLine,n, activeDeckFile);
 
-			//writes qNum-2 to the array each time,
-			//so when the loop leaves and goes to the next header,
-			//headerAndQsLocations[hNum][1] will be left with the number of questions in that header
-			headerAndQsLocations[hNum][1]=qNum-2;
-		}
-	}
-	
-	srand(time(NULL));
+        if (activeLine[0] == 'h' && activeLine[1] == ':'){
+            //line found is a header
+            hNum++;
+            headerAndQsLocations[hNum][0]=lineNum;
+            qNum = 2;
+        }else if (activeLine[0] == 'q' && activeLine[1] == ':'){
+            //then it's a question	
+            headerAndQsLocations[hNum][qNum]=lineNum;
+            qNum++;
 
-	hNum++;
-	//hnum is now equal to the amount of headers
-	
-	// Shuffles all questions within each each header in the array
-	// Goes one header at a time
-	for (int header = 0; header < hNum ;header++){
-		
-		//shuffle array (but only from [i][1] onwards)
-		//goes one question at a time
-		//swaps with a different question chosen at random
-		for (int question = 2; question < headerAndQsLocations[header][1] + 2 ; question++){
-			int temp = 0, transferTo = 0;
-			temp = headerAndQsLocations[header][question];
-			transferTo = rand() % (headerAndQsLocations[header][1]) + 2;
-			headerAndQsLocations[header][question] = headerAndQsLocations[header][transferTo];
-			headerAndQsLocations[header][transferTo] = temp; 
-		}
-	}
+            //writes qNum-2 to the array each time,
+            //so when the loop leaves and goes to the next header,
+            //headerAndQsLocations[hNum][1] will be left with the number of questions in that header
+            headerAndQsLocations[hNum][1]=qNum-2;
+        }
+    }
+
+    srand(time(NULL));
+
+    hNum++;
+    //hnum is now equal to the amount of headers
+
+    // Shuffles all questions within each each header in the array
+    // Goes one header at a time
+    for (int header = 0; header < hNum ;header++){
+
+        //shuffle array (but only from [i][1] onwards)
+        //goes one question at a time
+        //swaps with a different question chosen at random
+        for (int question = 2; question < headerAndQsLocations[header][1] + 2 ; question++){
+            int temp = 0, transferTo = 0;
+            temp = headerAndQsLocations[header][question];
+            transferTo = rand() % (headerAndQsLocations[header][1]) + 2;
+            headerAndQsLocations[header][question] = headerAndQsLocations[header][transferTo];
+            headerAndQsLocations[header][transferTo] = temp; 
+        }
+    }
 
 	/*
 	printf("\nThe array for debugging:  \n");
@@ -142,62 +141,62 @@ void testme(){
 	}
 	printf("\n");
 	*/
-	
-	//prints headers
-	printf("\n%s",input);
-	char headerForPrinting[BUFFSIZE];
-	for (int i = 0 ; i < hNum ; i++){
-		fgetsAtLineNum(headerForPrinting,BUFFSIZE,activeDeckName,headerAndQsLocations[i][0]);
-		printf(" - Section %d: %s", i+1, headerForPrinting);
-	}
-	printf("\nSkip to desired header by typing :h + header number when prompted to answer a question.\nE.g :h2\n");
 
-	// ASKING QUESTIONS
-	// Will be reusing char activeLine[]  since no longer in use
-	for (int header = 0 ; header < hNum ; header ++){
-		fgetsAtLineNum(activeLine,BUFFSIZE,activeDeckName,headerAndQsLocations[header][0]);
-		
-		// Shift activeLine left 2
-		shiftArray(activeLine,BUFFSIZE,-2);
-		
-		drawLine(100);
-		printf("Section %d: %s", header+1, activeLine);
-		drawLine(100);
-	
+    //prints headers
+    printf("\n%s",input);
+    char headerForPrinting[BUFFSIZE];
+    for (int i = 0 ; i < hNum ; i++){
+        fgetsAtLineNum(headerForPrinting,BUFFSIZE,activeDeckName,headerAndQsLocations[i][0]);
+        printf(" - Section %d: %s", i+1, headerForPrinting);
+    }
+    printf("\nSkip to desired header by typing :h + header number when prompted to answer a question.\nE.g :h2\n");
 
-		for (int question = 0 ; question < headerAndQsLocations[header][1]; question ++){
-			//print question
-			fgetsAtLineNum(activeLine,BUFFSIZE,activeDeckName,headerAndQsLocations[header][question+2]);
-			// Shift activeLine left 2 - gets rid of 'q:'
-			shiftArray(activeLine,BUFFSIZE,-2);
-			printf("%s",activeLine);
+    // ASKING QUESTIONS
+    // Will be reusing char activeLine[]  since no longer in use
+    for (int header = 0 ; header < hNum ; header ++){
+        fgetsAtLineNum(activeLine,BUFFSIZE,activeDeckName,headerAndQsLocations[header][0]);
 
-			//works out correct answer
-			fgetsAtLineNum(activeLine,BUFFSIZE,activeDeckName,headerAndQsLocations[header][question+2]+1);
-			shiftArray(activeLine,BUFFSIZE,-2);
-			
-			//wait for user answer
-			fgets(input, sizeof(input), stdin);
-			
-			if (input[0]==':'&&input[1]=='h'){
-				printf("Skipping to header %c. Give me 4 seconds.\n",input[2]);
-				question = headerAndQsLocations[header][1];
-				header = input[2]-2-'0';
-			}else if (!strcmp(input,activeLine))
-				printf("Correct!\n");
-			else{
-				printf("Incorrect :(\n");
-				printf("The correct answer was: %s", activeLine);
-			}
-			// print answer explanation
-			fgetsAtLineNum(activeLine,BUFFSIZE,activeDeckName,headerAndQsLocations[header][question+2]+2);
-			printf("%s",activeLine);
+        // Shift activeLine left 2
+        shiftArray(activeLine,BUFFSIZE,-2);
 
-			sleep(4);
-			drawLine(100);
+        drawLine(100);
+        printf("Section %d: %s", header+1, activeLine);
+        drawLine(100);
 
-		}
-	}
+
+        for (int question = 0 ; question < headerAndQsLocations[header][1]; question ++){
+            //print question
+            fgetsAtLineNum(activeLine,BUFFSIZE,activeDeckName,headerAndQsLocations[header][question+2]);
+            // Shift activeLine left 2 - gets rid of 'q:'
+            shiftArray(activeLine,BUFFSIZE,-2);
+            printf("%s",activeLine);
+
+            //works out correct answer
+            fgetsAtLineNum(activeLine,BUFFSIZE,activeDeckName,headerAndQsLocations[header][question+2]+1);
+            shiftArray(activeLine,BUFFSIZE,-2);
+
+            //wait for user answer
+            fgets(input, sizeof(input), stdin);
+
+            if (input[0]==':'&&input[1]=='h'){
+                printf("Skipping to header %c. Give me 4 seconds.\n",input[2]);
+                question = headerAndQsLocations[header][1];
+                header = input[2]-2-'0';
+            }else if (!strcmp(input,activeLine))
+                printf("Correct!\n");
+            else{
+                printf("Incorrect :(\n");
+                printf("The correct answer was: %s", activeLine);
+            }
+            // print answer explanation
+            fgetsAtLineNum(activeLine,BUFFSIZE,activeDeckName,headerAndQsLocations[header][question+2]+2);
+            printf("%s",activeLine);
+
+            sleep(4);
+            drawLine(100);
+
+        }
+    }
         fclose(activeDeckFile);
 }
 
