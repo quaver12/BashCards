@@ -7,6 +7,16 @@
 
 #define BUFFSIZE 300
 
+// IMPROVEMENTS I COULD MAKE TO PROGRAM
+//  - just pass around pointers when shuffling instead of using strcpy
+//  - rename buffsize buffmax or maxbuff
+//  - use malloc
+
+// FOR NEXT TIME
+//  - test shuffle and see if actually working
+//  - once complete, begin replacing array with struct version
+
+// A 'subdeck' has one header (h:) and then all the questions/answers/explanations until the next header. Questions are randomised within a subdeck.
 struct subdeckFormat{
     char header[BUFFSIZE];
     int questionAmount;
@@ -28,6 +38,7 @@ char *findDecks(char *deckFilesDirectory); // locates the file location of the d
 void listAvailableDecks(); // Prints the the downloaded decks in the default deck location to the shell.
 int countHeaders(FILE *inFile); // counts the number of headers/subdecks in file. resets fgets count of file at end.
 struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile); // returns an array of each 'subdeck' in a file (containing 1 header, the number of questions, and all questions in that header)
+struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
 
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
 void testme();         // tests the user on a deck of flashcards.
@@ -40,15 +51,15 @@ void decks();          // Lists available decks
 int main(int argc, char *argv[]){
 
     if (argc == 1){
-    testme();
+        testme(); // run testme by default
 
     }else if (strcmp(argv[1],"add")==0){
         //add to existing deck of flashcards or make a new one!
-    add();
+        add();
 
     }else if (strcmp(argv[1],"testme")==0){
         //asks practice questions from chosen deck of flashcards
-    testme();
+        testme();
 
     }else{
         printf("Unknown BashCards command. Please try again.\n");
@@ -101,7 +112,8 @@ void testme(){
     int headersAmount = countHeaders(activeDeckFile);
     struct subdeckFormat subdeck[headersAmount]; // initialise an array of each of the subdecks
     buildSubdecks(subdeck, activeDeckFile); // fill/build that array
-
+    //shuffle questions of subdecks
+    shuffleSubdecks(subdeck, headersAmount);
 
     printf("the second header is: %s\n",subdeck[1].header);
     printf("the number of questions in subdeck 3 is: %d\n",subdeck[2].questionAmount);
@@ -134,11 +146,11 @@ void testme(){
         }
     }
 
-    srand(time(NULL));
 
     hNum++;
     //hnum is now equal to the amount of headers
 
+    srand(time(NULL));
     // Shuffles all questions within each each header in the array
     // Goes one header at a time
     for (int header = 0; header < hNum ;header++){
@@ -505,6 +517,26 @@ buildSubdecks (struct subdeckFormat *subdeck, FILE *inFile){
 }
 
 
+struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int sdNum){
+    srand(time(NULL));
+    // Shuffles all questions within each each header in the array
+    // Goes one header at a time
+    for (int sd= 0; sd< sdNum ;sd++){
+
+        //goes one question at a time
+        //swaps with a different question chosen at random
+        for (int q = 0; q < subdeck[sd].questionAmount ; q++){
+            if (subdeck[sd].questionAmount > 1){
+                char temp[BUFFSIZE];
+                strcpy(temp,subdeck[sd].question[q]);
+                int r = rand() % (subdeck[sd].questionAmount - 1);
+
+                strcpy(subdeck[sd].question[q],subdeck[sd].question[r]);
+                strcpy(subdeck[sd].question[r],temp);
+            }
+        }
+    }
+}
 
 
 
