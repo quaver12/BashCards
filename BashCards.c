@@ -7,6 +7,14 @@
 
 #define BUFFSIZE 300
 
+struct subdeckFormat{
+    char header[BUFFSIZE];
+    int questionAmount;
+    char question[BUFFSIZE][BUFFSIZE]; // array of strings
+    char answer[BUFFSIZE][BUFFSIZE];
+    char explanation[BUFFSIZE][BUFFSIZE];
+};
+
 // ------------------------------------------ General Utility Functions ------------------------------------------
 int countFileLines(char *fileName); // counts number of lines in .txt file. Returns number of lines as int
 char *fgetsAtLineNum(char *string, int bufferSize, char *fileName, int lineNum); // reads the line at lineNum from a txt file into string. Returns string or NULL if error
@@ -18,11 +26,14 @@ int isCorrect(const char userAns[], const char correctAns[], int uaLen, int caLe
 // ------------------------------------------ Program Specific Functions -----------------------------------------
 char *findDecks(char *deckFilesDirectory); // locates the file location of the downloaded decks. Dictated by .config file.
 void listAvailableDecks(); // Prints the the downloaded decks in the default deck location to the shell.
+int countHeaders(FILE *inFile); // counts the number of headers/subdecks in file. resets fgets count of file at end.
+struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile); // returns an array of each 'subdeck' in a file (containing 1 header, the number of questions, and all questions in that header)
 
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
 void testme();         // tests the user on a deck of flashcards.
 void help();           // Gives a quick help option for users.
 void add();            // User can make a deck by adding flashcards.
+void decks();          // Lists available decks
 
 //---------------------------------------------- App Mode Selection ----------------------------------------------
 
@@ -52,7 +63,7 @@ int main(int argc, char *argv[]){
 void testme(){
     //list available decks
     //if (isCorrect("predicates and relations","Properties and Relations",24,24))
-    //	printf("isCorrect returned true!!\n");
+    //printf("isCorrect returned true!!\n");
 
 
     listAvailableDecks();
@@ -65,15 +76,11 @@ void testme(){
 
     char input[BUFFSIZE];
     fgets(input, sizeof(input), stdin);
+    newLineToNull(input);
 
-    strcat(activeDeckName,decksLocation);
-    strcat(activeDeckName,"/");
-    strcat(activeDeckName,input);
-
-    newLineToNull(activeDeckName);
+    sprintf (activeDeckName,"%s/%s",decksLocation,input);
 
     printf("Opening %s...\n", activeDeckName);
-
 
     FILE *activeDeckFile;
     if(!(activeDeckFile = fopen(activeDeckName,"r"))){
@@ -84,6 +91,24 @@ void testme(){
 
     char activeLine[BUFFSIZE];
     int qNum = 2, hNum = -1, headerAndQsLocations[10][60] = {};
+
+
+    // instead of contructing array, construct struct using constructSubdecks()
+    // struct subdeck *constructsSubdecks()
+    // will return the amount of subdecks (equal to number of headers)
+    // subdeck[2].question[2]
+
+    int headersAmount = countHeaders(activeDeckFile);
+    struct subdeckFormat subdeck[headersAmount]; // initialise an array of each of the subdecks
+    buildSubdecks(subdeck, activeDeckFile); // fill/build that array
+
+
+    printf("the second header is: %s\n",subdeck[1].header);
+    printf("the number of questions in subdeck 3 is: %d\n",subdeck[2].questionAmount);
+    printf("question 3 of the sixth header is: %s\n",subdeck[5].question[2]);
+    printf("the answer to h2 q4 is: %s\n",subdeck[1].answer[3]);
+    printf("the explanation to of h6 q3 is: %s\n",subdeck[5].explanation[2]);
+
 
     // Constructs array with the linenumber of each header and question, as well as the number of questions
     // e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
@@ -129,18 +154,6 @@ void testme(){
             headerAndQsLocations[header][transferTo] = temp; 
         }
     }
-
-	/*
-	printf("\nThe array for debugging:  \n");
-	for (int i = 0 ; i <4 ; i++){
-		for (int j = 0 ; j < 15; j ++){
-		printf("%d ",headerAndQsLocations[i][j]);
-
-		}
-	printf("\n");
-	}
-	printf("\n");
-	*/
 
     //prints headers
     printf("\n%s",input);
@@ -434,5 +447,68 @@ void listAvailableDecks(){
     printf("\nIf you wish to change your deck save location please go to ~/.config/bashcards/decksavelocation\n");
     drawLine (100);
 }
+
+int countHeaders(FILE *inFile){
+    int i = 0;
+    char array[BUFFSIZE];
+    int n = 300;
+    while (fgets(array, n, inFile))
+        if (array[0]=='h'&&array[1]==':')
+            i++;
+    rewind(inFile);
+    return i;
+}
+
+struct subdeckFormat *
+buildSubdecks (struct subdeckFormat *subdeck, FILE *inFile){
+    /* As a reminder, subdecks are formatted as follows:
+ 
+    struct subdeckFormat{
+        char header[BUFFSIZE];
+        int questionAmount;
+        char question[BUFFSIZE][BUFFSIZE]; // array of strings
+        char answer[BUFFSIZE][BUFFSIZE];
+        char explanation[BUFFSIZE][BUFFSIZE];
+    }; */
+
+    char activeLine[BUFFSIZE];
+    int hNum = -1, qNum = -1;
+    while (fgets(activeLine, BUFFSIZE , inFile)){
+        if (activeLine[0] == 'h' && activeLine[1] == ':'){
+            //if header found
+            if (hNum >= 0)
+                subdeck[hNum].questionAmount = qNum+1;
+            qNum = -1;
+
+            hNum++;
+            newLineToNull(activeLine);
+            strcpy(subdeck[hNum].header,activeLine);
+
+        }else if (activeLine[0] == 'q' && activeLine[1] == ':'){
+            //if question found
+            qNum ++;
+            newLineToNull(activeLine);
+            strcpy(subdeck[hNum].question[qNum],activeLine);
+
+        }else if (activeLine[0] == 'a' && activeLine[1] == ':'){
+            //if answer found
+            newLineToNull(activeLine);
+            strcpy(subdeck[hNum].answer[qNum],activeLine);
+            //then also get explanation on next line
+            fgets(activeLine, BUFFSIZE, inFile);
+            newLineToNull(activeLine);
+            strcpy(subdeck[hNum].explanation[qNum],activeLine);
+        }
+    }
+    rewind(inFile);
+    return subdeck;
+}
+
+
+
+
+
+
+
 
 
