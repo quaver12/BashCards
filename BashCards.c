@@ -10,6 +10,7 @@
 // IMPROVEMENTS I COULD MAKE TO PROGRAM
 //  - just pass around pointers when shuffling instead of using strcpy
 //  - rename buffsize buffmax or maxbuff
+//  - use pointer notation when handling subdeck?
 
 // FOR NEXT TIME
 //  - test shuffle and see if actually working
@@ -38,6 +39,7 @@ void listAvailableDecks(); // Prints the the downloaded decks in the default dec
 int countHeaders(FILE *inFile); // counts the number of headers/subdecks in file. resets fgets count of file at end.
 struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile); // returns an array of each 'subdeck' in a file (containing 1 header, the number of questions, and all questions in that header)
 struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
+void listHeaders (struct subdeckFormat *subdeck, int headersAmount); // Lists the headers of the active subdeck.
 
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
 void testme();         // tests the user on a deck of flashcards.
@@ -115,12 +117,14 @@ void testme(){
         printf("Memory Allocation Failed.");
         return;
     }
-
     buildSubdecks(subdeck, activeDeckFile); // fill/build that array
-    
+    //check prior to shuffle
+    printf("%s, %s, %s, %s, %s, %s, %s, %s\n",subdeck[5].question[0],subdeck[5].question[1],subdeck[5].question[2],subdeck[5].question[3],subdeck[5].question[4],subdeck[5].question[5],subdeck[5].question[6],subdeck[5].question[7]);
 
     //shuffle questions of subdecks
     shuffleSubdecks(subdeck, headersAmount);
+
+    printf("%s, %s, %s, %s, %s, %s, %s, %s\n",subdeck[5].question[4],subdeck[5].question[1],subdeck[5].question[2],subdeck[5].question[3],subdeck[5].question[4],subdeck[5].question[5],subdeck[5].question[6],subdeck[5].question[7]);
 
     printf("the second header is: %s\n",subdeck[1].header);
     printf("the number of questions in subdeck 3 is: %d\n",subdeck[2].questionAmount);
@@ -128,7 +132,8 @@ void testme(){
     printf("the answer to h2 q4 is: %s\n",subdeck[1].answer[3]);
     printf("the explanation to of h6 q3 is: %s\n",subdeck[5].explanation[2]);
 
-
+    listHeaders(subdeck, headersAmount); // Lists the headers of the active subdeck.
+    
     // Constructs array with the linenumber of each header and question, as well as the number of questions
     // e.g. first header in a file :[0][line of header, there are 3 questions in this header, line of question 1, line of question 2, line of question 3]
     // headerAndQsLocations[headernumber][]=[line of header, number of questions, line number of question 1, line number of q2, etc...]
@@ -173,16 +178,6 @@ void testme(){
             headerAndQsLocations[header][transferTo] = temp; 
         }
     }
-
-    //prints headers
-    printf("\n%s",input);
-    char headerForPrinting[BUFFSIZE];
-    for (int i = 0 ; i < hNum ; i++){
-        fgetsAtLineNum(headerForPrinting,BUFFSIZE,activeDeckName,headerAndQsLocations[i][0]);
-        printf(" - Section %d: %s", i+1, headerForPrinting);
-    }
-    printf("\nSkip to desired header by typing :h + header number when prompted to answer a question.\nE.g :h2\n");
-
     // ASKING QUESTIONS
     // Will be reusing char activeLine[]  since no longer in use
     for (int header = 0 ; header < hNum ; header ++){
@@ -377,7 +372,7 @@ void drawLine(int lineLength){
 char *shiftArray(char *arrayLocation, int bufferSize, int shiftAmt){
     // The value at location arrayLocation should be set to the value of arraylocation + shiftAmt
     if(shiftAmt < 0)
-        for (int i = shiftAmt; i < bufferSize ; i++)
+        for (int i = -shiftAmt; i < bufferSize ; i++)
             *(arrayLocation + i + shiftAmt) = *(arrayLocation + i);
     else
         for (int i = (bufferSize-shiftAmt-1); i >= 0 ; i--)
@@ -547,6 +542,7 @@ struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int sdNum){
                 strcpy(subdeck[sd].question[q],subdeck[sd].question[r]);
                 strcpy(subdeck[sd].answer[q],subdeck[sd].answer[r]);
                 strcpy(subdeck[sd].explanation[q],subdeck[sd].explanation[r]);
+
                 strcpy(subdeck[sd].question[r],tempQ);
                 strcpy(subdeck[sd].answer[r],tempA);
                 strcpy(subdeck[sd].explanation[r],tempE);
@@ -555,8 +551,17 @@ struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int sdNum){
     }
 }
 
-
-
+void listHeaders (struct subdeckFormat *subdeck, int sNum){
+    char line[BUFFSIZE];
+    printf("\n");
+    for (int i = 0 ; i < sNum ; i++){
+        strcpy(line,subdeck[i].header);
+        shiftArray(line, BUFFSIZE, -2); // shifts each element of array by shiftAmt. Right if positive left if negative. Returns array
+        printf(" - %d: %s\n",i+1,line);
+    }
+    printf("\nType :h followed by header number to skip to any header! (Work in progress)\n");
+    drawLine(100);
+}
 
 
 
