@@ -75,7 +75,6 @@ void testme(){
     //if (isCorrect("predicates and relations","Properties and Relations",24,24))
     //printf("isCorrect returned true!!\n");
 
-
     listAvailableDecks();
 
     char decksLocation[BUFFSIZE];
@@ -536,12 +535,21 @@ struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int sdNum){
         //swaps with a different question chosen at random
         for (int q = 0; q < subdeck[sd].questionAmount ; q++){
             if (subdeck[sd].questionAmount > 1){
-                char temp[BUFFSIZE];
-                strcpy(temp,subdeck[sd].question[q]);
+                char tempQ[BUFFSIZE];
+                char tempA[BUFFSIZE];
+                char tempE[BUFFSIZE];
+                strcpy(tempQ,subdeck[sd].question[q]);
+                strcpy(tempA,subdeck[sd].answer[q]);
+                strcpy(tempE,subdeck[sd].explanation[q]);
+
                 int r = rand() % (subdeck[sd].questionAmount - 1);
 
                 strcpy(subdeck[sd].question[q],subdeck[sd].question[r]);
-                strcpy(subdeck[sd].question[r],temp);
+                strcpy(subdeck[sd].answer[q],subdeck[sd].answer[r]);
+                strcpy(subdeck[sd].explanation[q],subdeck[sd].explanation[r]);
+                strcpy(subdeck[sd].question[r],tempQ);
+                strcpy(subdeck[sd].answer[r],tempA);
+                strcpy(subdeck[sd].explanation[r],tempE);
             }
         }
     }
