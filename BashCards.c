@@ -10,7 +10,6 @@
 // IMPROVEMENTS I COULD MAKE TO PROGRAM
 //  - just pass around pointers when shuffling instead of using strcpy
 //  - rename buffsize buffmax or maxbuff
-//  - use malloc
 
 // FOR NEXT TIME
 //  - test shuffle and see if actually working
@@ -110,8 +109,17 @@ void testme(){
     // subdeck[2].question[2]
 
     int headersAmount = countHeaders(activeDeckFile);
-    struct subdeckFormat subdeck[headersAmount]; // initialise an array of each of the subdecks
+
+    struct subdeckFormat *subdeck = (struct subdeckFormat*) malloc (headersAmount*sizeof(struct subdeckFormat));
+
+    if (subdeck == NULL){
+        printf("Memory Allocation Failed.");
+        return;
+    }
+
     buildSubdecks(subdeck, activeDeckFile); // fill/build that array
+    
+
     //shuffle questions of subdecks
     shuffleSubdecks(subdeck, headersAmount);
 
@@ -222,6 +230,7 @@ void testme(){
 
         }
     }
+        free(subdeck);
         fclose(activeDeckFile);
 }
 
