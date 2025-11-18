@@ -1,2 +1,5 @@
-h:
+h:Translate the following english phrases to german:
+q:for example
+a:zum Beispiel
+ - 
 
