@@ -1,0 +1,17 @@
+h: Translate the following household nouns into English:
+-------------------------------------------------------
+q:the knife
+a:das Messer
+ -
+q:the floor
+a:der Boden
+ -
+q:the bathroom
+a:das Badezimmer
+ - you can also just say 'Bad' E.g. Ich gehe im Bad
+q:the house
+a:das Haus
+ -
+q:the garden
+a:der Garten
+ -
