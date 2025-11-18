@@ -119,18 +119,18 @@ void testme(){
     }
     buildSubdecks(subdeck, activeDeckFile); // fill/build that array
     //check prior to shuffle
-    printf("%s, %s, %s, %s, %s, %s, %s, %s\n",subdeck[5].question[0],subdeck[5].question[1],subdeck[5].question[2],subdeck[5].question[3],subdeck[5].question[4],subdeck[5].question[5],subdeck[5].question[6],subdeck[5].question[7]);
+    //printf("%s, %s, %s, %s, %s, %s, %s, %s\n",subdeck[5].question[0],subdeck[5].question[1],subdeck[5].question[2],subdeck[5].question[3],subdeck[5].question[4],subdeck[5].question[5],subdeck[5].question[6],subdeck[5].question[7]);
 
     //shuffle questions of subdecks
     shuffleSubdecks(subdeck, headersAmount);
 
-    printf("%s, %s, %s, %s, %s, %s, %s, %s\n",subdeck[5].question[4],subdeck[5].question[1],subdeck[5].question[2],subdeck[5].question[3],subdeck[5].question[4],subdeck[5].question[5],subdeck[5].question[6],subdeck[5].question[7]);
+    //printf("%s, %s, %s, %s, %s, %s, %s, %s\n",subdeck[5].question[4],subdeck[5].question[1],subdeck[5].question[2],subdeck[5].question[3],subdeck[5].question[4],subdeck[5].question[5],subdeck[5].question[6],subdeck[5].question[7]);
 
-    printf("the second header is: %s\n",subdeck[1].header);
-    printf("the number of questions in subdeck 3 is: %d\n",subdeck[2].questionAmount);
-    printf("question 3 of the sixth header is: %s\n",subdeck[5].question[2]);
-    printf("the answer to h2 q4 is: %s\n",subdeck[1].answer[3]);
-    printf("the explanation to of h6 q3 is: %s\n",subdeck[5].explanation[2]);
+    //printf("the second header is: %s\n",subdeck[1].header);
+    //printf("the number of questions in subdeck 3 is: %d\n",subdeck[2].questionAmount);
+    //printf("question 3 of the sixth header is: %s\n",subdeck[5].question[2]);
+    //printf("the answer to h2 q4 is: %s\n",subdeck[1].answer[3]);
+    //printf("the explanation to of h6 q3 is: %s\n",subdeck[5].explanation[2]);
 
     listHeaders(subdeck, headersAmount); // Lists the headers of the active subdeck.
     
@@ -186,7 +186,6 @@ void testme(){
         // Shift activeLine left 2
         shiftArray(activeLine,BUFFSIZE,-2);
 
-        drawLine(100);
         printf("Section %d: %s", header+1, activeLine);
         drawLine(100);
 
@@ -223,7 +222,15 @@ void testme(){
             drawLine(100);
 
         }
+
     }
+
+
+
+    
+
+
+
         free(subdeck);
         fclose(activeDeckFile);
 }
