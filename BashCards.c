@@ -13,8 +13,8 @@
 //  - use pointer notation when handling subdeck?
 
 // FOR NEXT TIME
-//  - test shuffle and see if actually working
-//  - once complete, begin replacing array with struct version
+//  - test program
+//  - clean up file and remove unused functions?
 
 // A 'subdeck' has one header (h:) and then all the questions/answers/explanations until the next header. Questions are randomised within a subdeck.
 struct subdeckFormat{
@@ -40,7 +40,7 @@ int countHeaders(FILE *inFile); // counts the number of headers/subdecks in file
 struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile); // returns an array of each 'subdeck' in a file (containing 1 header, the number of questions, and all questions in that header)
 struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
 void listHeaders (struct subdeckFormat *subdeck, int headersAmount); // Lists the headers of the active subdeck.
-void askQuestions(struct subdeckFormat *subdeck, int subdeckToAsk); // asks questions of one specific subdeck (passed into function);
+int askQuestions(struct subdeckFormat *subdeck, int subdeckToAsk); // asks questions of one specific subdeck (passed into function);
 
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
 void testme();         // tests the user on a deck of flashcards.
@@ -108,10 +108,24 @@ void testme(){
     shuffleSubdecks(subdeck, headersAmount);
 
     listHeaders(subdeck, headersAmount);
-
-    //ask questions
-    for (int i = 0 ; i < headersAmount ; i++)
-        askQuestions(subdeck, i);
+    
+    int command;
+    //ask questions but checks for 'commands'
+    for (int i = 0 ; i < headersAmount ; i++){
+        //askQuestions returns -1 if running normally, or different if user wants to run a command.
+        command = askQuestions(subdeck,i);
+        if (command){
+            drawLine(100);
+            if (command == -1){
+                listHeaders(subdeck,headersAmount);
+                i--;
+            }else if (command>headersAmount || command<1){
+                printf("That's not a valid header to skip to. Restarting current header...\n");
+                i--;
+            }else
+                i = command-2;// going to be incremented anyway
+        }
+    }
 
     free(subdeck);
     fclose(activeDeckFile);
@@ -451,22 +465,27 @@ void listHeaders (struct subdeckFormat *subdeck, int sNum){
     for (int i = 0 ; i < sNum ; i++){
         printf(" - %d: %s\n",i+1,subdeck[i].header);
     }
-    printf("\nType :h followed by header number to skip to any header! (Work in progress)\n");
+    printf("\nType : followed by a number to skip to that header.\n:0 skips to the next header and :-1 lists all headers again!\nUSING ANY COMMAND WILL ERASE ANY CURRENT PROGRESS\n");
     drawLine(100);
 }
 
-void askQuestions(struct subdeckFormat *subdeck, int s){
+int askQuestions(struct subdeckFormat *subdeck, int s){
+    // asks questions
+    // notably returns NULL if worked successfully, or
     char input[BUFFSIZE];
     printf("Section %d: %s\n",s+1,subdeck[s].header);
     drawLine(100);
-    printf("%d %d\n",s,subdeck[s].questionAmount);
     for (int i = 0 ; i<subdeck[s].questionAmount ; i++){
 
         printf ("%s\n",subdeck[s].question[i]);
         fgets(input, sizeof(input), stdin);
         newLineToNull(input);
 
-        if (!strcmp(input,subdeck[s].answer[i]))
+        if (input[0]==':'){
+            //if input is a command
+            shiftArray(input,BUFFSIZE,-1);
+            return atoi(input); // returns the integer value
+        }else if (!strcmp(input,subdeck[s].answer[i]))
             printf("Correct!\n");
         else
             printf("Incorrect\nThe correct answer was: %s\n",subdeck[s].answer[i]);
@@ -475,7 +494,7 @@ void askQuestions(struct subdeckFormat *subdeck, int s){
         drawLine(100);
     }
     printf("End of questions.\n");
-
+    return -1;
 }
 
 
