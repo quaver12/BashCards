@@ -1,6 +1,6 @@
 Small CLI-based flashcards program to help my University studies.
 
-####Installation
+#### Installation
 
 *Linux Installation* 
 
@@ -11,7 +11,7 @@ cd BashCards
 sh install.sh
 ```
 
-####How to Use
+#### How to Use
 
 To begin, in your terminal simply run:
 ```
@@ -25,7 +25,7 @@ After starting bashcards, simply type the name of the deck you want to open and 
 You can also skip between different headers at any time by writing : followed by the header name whenever prompted to answer a question. (E.g. :5 ).
 :0 will skip to the next header and :-1 will list all the headers you have avaliable.
 
-####Making Decks
+#### Making Decks
 
 The download comes with some example 'decks' - which are just text files formatted a certain way.
 You can make your own by formatting headers, questions and answers the following way:
