@@ -13,8 +13,10 @@
 //  - use pointer notation when handling subdeck?
 
 // FOR NEXT TIME
-//  - test program
-//  - clean up file and remove unused functions?
+//  - let user pass in deck name as argument from command line
+//  - allow for running decks in decks directory without having to put '.txt' on end
+//  - also allow you to run any deck file in active directory but putting '.txt' on end.
+//  - running just 'bcards' will just list avalailable decks
 
 // A 'subdeck' has one header (h:) and then all the questions/answers/explanations until the next header. Questions are randomised within a subdeck.
 struct subdeckFormat{
@@ -27,7 +29,6 @@ struct subdeckFormat{
 
 // ------------------------------------------ General Utility Functions ------------------------------------------
 int countFileLines(char *fileName); // counts number of lines in .txt file. Returns number of lines as int
-char *fgetsAtLineNum(char *string, int bufferSize, char *fileName, int lineNum); // reads the line at lineNum from a txt file into string. Returns string or NULL if error
 void drawLine(int lineLength); // Draws a line of hyphons ending with \n.
 char *shiftArray(char *array, int bufferSize, int shiftAmt); // shifts each element of array by shiftAmt. Right if positive left if negative. Returns array
 char *newLineToNull(char *string); // replaces first '\n' found with '\0'. Returns same string passed in.
@@ -40,13 +41,13 @@ int countHeaders(FILE *inFile); // counts the number of headers/subdecks in file
 struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile); // returns an array of each 'subdeck' in a file (containing 1 header, the number of questions, and all questions in that header)
 struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
 void listHeaders (struct subdeckFormat *subdeck, int headersAmount); // Lists the headers of the active subdeck.
-int askQuestions(struct subdeckFormat *subdeck, int subdeckToAsk); // asks questions of one specific subdeck (passed into function);
+int askQuestions(struct subdeckFormat *subdeck, int subdeckToAsk); // asks questions of one specific subdeck (passed into function). Returns 0 if worked normally. Returns different values if user has used a 'command';
 
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
-void testme();         // tests the user on a deck of flashcards.
-void help();           // Gives a quick help option for users.
-void add();            // User can make a deck by adding flashcards.
-void decks();          // Lists available decks
+void testme();         // tests the user on a deck of flashcards. -- Working
+void help();           // Gives a quick help option for users. -- Not Started
+void add();            // User can make a deck by adding flashcards. -- Needs remaking
+void decks();          // Lists available decks -- Not Started
 
 //---------------------------------------------- App Mode Selection ----------------------------------------------
 
@@ -76,7 +77,7 @@ int main(int argc, char *argv[]){
 void testme(){
     listAvailableDecks();
 
-    char decksLocation[BUFFSIZE],input[BUFFSIZE],activeDeckName[BUFFSIZE];
+    char decksLocation[BUFFSIZE],activeDeckName[BUFFSIZE],input[BUFFSIZE];
 
     findDecks(decksLocation);
 
@@ -108,7 +109,7 @@ void testme(){
     shuffleSubdecks(subdeck, headersAmount);
 
     listHeaders(subdeck, headersAmount);
-    
+
     int command;
     //ask questions but checks for 'commands'
     for (int i = 0 ; i < headersAmount ; i++){
@@ -231,32 +232,6 @@ int countFileLines(char *fileName){
 
     fclose(readInFile);
     return lines;
-}
-
-// Intended to work the same way as fgets, except you can pass in the specific line number
-// of a .txt file you want it to return.
-char *fgetsAtLineNum(char *string, int bufferSize, char *fileName, int lineNum){
-    // NOTE: This function will cause problems if the bufferSize you're inputting into this funcion
-    // and the actual buffersize of the string you're writing to are different.
-
-    char lineString[bufferSize] = {};
-    FILE *activeDeckFile;
-
-    if (!(activeDeckFile = fopen(fileName,"r"))){
-        printf("Unable to open file during fgetsAtLineNum()");
-        return NULL;
-    }
-
-    for (int i = 1; i <= lineNum ; i ++)
-        fgets(lineString,bufferSize, activeDeckFile);
-
-    // sets the variable at the location stringLocation to linesString[0]
-    // and then again for lineString [1] 2 3 etc...
-    for (int i = 0; i < bufferSize ; i ++)
-        *(string + i) = lineString[i];
-
-    fclose(activeDeckFile);
-    return string;
 }
 
 // Just draws a line of hyphons finishing with \n
