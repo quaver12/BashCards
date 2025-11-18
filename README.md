@@ -1,4 +1,4 @@
-Small CLI flashcards program to help my University studies.
+A small CLI flashcards program to help my University studies.
 
 ## Installation
 
@@ -33,7 +33,7 @@ Typing ```:0``` will jump to the next header and typing ```:-1``` will list all 
 
 ### Making Decks
 
-The download comes with some example 'decks' - which are just .txt files formatted a certain way.
+The download comes with some example 'decks' *(will be adding soon)* - which are just .txt files formatted a certain way.
 You can make your own by formatting headers, questions and answers the following way:
 ```
 h:This is a header - headers are asked in the order they appear in the file
@@ -53,9 +53,7 @@ a:New Amsterdam
 
 q::   <<-- be sure to never write a question like this with another colon after the q: prefix.
             (a user will never be able to answer it without writing a command)
-
-
 ```
 
-#### If anyone else finds any use out of this small project, thank you so much for taking an interest!
+#### If anyone else finds any use out of this small project, thank you so much for taking an interest and I hope you find it useful!
 
