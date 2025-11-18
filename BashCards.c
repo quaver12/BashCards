@@ -74,17 +74,13 @@ int main(int argc, char *argv[]){
 
 // tests user on selected deck
 void testme(){
-    //list available decks
-
     listAvailableDecks();
 
-    char decksLocation[BUFFSIZE];
+    char decksLocation[BUFFSIZE],input[BUFFSIZE],activeDeckName[BUFFSIZE];
+
     findDecks(decksLocation);
 
-    char activeDeckName[BUFFSIZE];
     printf("Which deck file would you like to be tested on? Please enter full file name: ");
-
-    char input[BUFFSIZE];
     fgets(input, sizeof(input), stdin);
     newLineToNull(input);
 
@@ -101,29 +97,21 @@ void testme(){
 
     int headersAmount = countHeaders(activeDeckFile);
 
-    struct subdeckFormat *subdeck = (struct subdeckFormat*) malloc (headersAmount*sizeof(struct subdeckFormat));
+    struct subdeckFormat *
+    subdeck = (struct subdeckFormat*) malloc (headersAmount*sizeof(struct subdeckFormat));
     if (subdeck == NULL){
         printf("Memory Allocation Failed.");
         return;
     }
 
-    buildSubdecks(subdeck, activeDeckFile); // fill/build that array
-
+    buildSubdecks(subdeck, activeDeckFile);
     shuffleSubdecks(subdeck, headersAmount);
 
-    listHeaders(subdeck, headersAmount); // Lists the headers of the active subdeck.
+    listHeaders(subdeck, headersAmount);
 
     //ask questions
-
-    for (int i = 0 ; i < headersAmount ; i ++)
+    for (int i = 0 ; i < headersAmount ; i++)
         askQuestions(subdeck, i);
-
-
-
-
-
-
-
 
     free(subdeck);
     fclose(activeDeckFile);
@@ -421,6 +409,8 @@ buildSubdecks (struct subdeckFormat *subdeck, FILE *inFile){
             strcpy(subdeck[hNum].explanation[qNum],activeLine);
         }
     }
+    // had to add here to set questionAmount the final time - maybe consider making code cleaner
+    subdeck[hNum].questionAmount = qNum+1;
     rewind(inFile);
     return subdeck;
 }
@@ -465,24 +455,26 @@ void listHeaders (struct subdeckFormat *subdeck, int sNum){
     drawLine(100);
 }
 
-
 void askQuestions(struct subdeckFormat *subdeck, int s){
+    char input[BUFFSIZE];
     printf("Section %d: %s\n",s+1,subdeck[s].header);
+    drawLine(100);
+    printf("%d %d\n",s,subdeck[s].questionAmount);
+    for (int i = 0 ; i<subdeck[s].questionAmount ; i++){
 
+        printf ("%s\n",subdeck[s].question[i]);
+        fgets(input, sizeof(input), stdin);
+        newLineToNull(input);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if (!strcmp(input,subdeck[s].answer[i]))
+            printf("Correct!\n");
+        else
+            printf("Incorrect\nThe correct answer was: %s\n",subdeck[s].answer[i]);
+        sleep(1);
+        printf("%s\n",subdeck[s].explanation[i]);
+        drawLine(100);
+    }
+    printf("End of questions.\n");
 
 }
 
