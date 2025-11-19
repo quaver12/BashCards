@@ -17,6 +17,7 @@
 //  - allow for running decks in decks directory without having to put '.txt' on end
 //  - also allow you to run any deck file in active directory but putting '.txt' on end.
 //  - running just 'bcards' will just list avalailable decks
+//  - prevent crash if decks cannot be located
 
 // A 'subdeck' has one header (h:) and then all the questions/answers/explanations until the next header. Questions are randomised within a subdeck.
 struct subdeckFormat{
