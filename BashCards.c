@@ -13,11 +13,14 @@
 //  - use pointer notation when handling subdeck?
 
 // FOR NEXT TIME
-//  - let user pass in deck name as argument from command line
+//  - add windows preprocessors and ability.
+//  - add windows installation option
+//  - prevent crash if decks cannot be located - prevent all seg dumps where able
 //  - allow for running decks in decks directory without having to put '.txt' on end
 //  - also allow you to run any deck file in active directory but putting '.txt' on end.
 //  - running just 'bcards' will just list avalailable decks
-//  - prevent crash if decks cannot be located
+//  - add a couple of example decks for publishing with files
+//  - let user pass in deck name as argument from command line
 
 // A 'subdeck' has one header (h:) and then all the questions/answers/explanations until the next header. Questions are randomised within a subdeck.
 struct subdeckFormat{
@@ -57,10 +60,10 @@ int main(int argc, char *argv[]){
     if (argc == 1){
         testme(); // run testme by default
 
-    }else if (strcmp(argv[1],"add")==0){
-        //add to existing deck of flashcards or make a new one!
-        add();
-
+    }else if (strcmp(argv[1],"-f")==0 || strcmp(argv[1],"-files")==0){
+        //just outputs the location of your set deck save location
+        char decksLocation[BUFFSIZE];
+        printf("%s\n",findDecks(decksLocation));
     }else if (strcmp(argv[1],"testme")==0){
         //asks practice questions from chosen deck of flashcards
         testme();
@@ -298,6 +301,15 @@ int isCorrect(const char userAns[], const char correctAns[], int uaLen, int caLe
 
 char *findDecks(char *output){
 
+#ifdef _WIN32
+    //----------------Windows implementation-------------------
+    
+
+    // add code here
+
+
+
+#else
     //----------------Linux implementation-------------------
     char deckFilesLocation[BUFFSIZE] = {}, configFileLocation[BUFFSIZE] = {};
     char *homeDirectory = getenv("HOME");
@@ -321,10 +333,19 @@ char *findDecks(char *output){
     //printf("deck files location %s",deckFilesLocation);
     strcpy(output,deckFilesLocation);
     return output;
+#endif 
 }
 
 void listAvailableDecks(){
 
+#ifdef _WIN32
+    //---------------Windows Implementation-------------------
+
+
+    // add code here
+
+
+#else
     //---------------Linux Implementation-------------------
     char decksLocation[BUFFSIZE];
     findDecks(decksLocation);
@@ -340,6 +361,7 @@ void listAvailableDecks(){
     closedir(decksDirectory);
     printf("\nIf you wish to change your deck save location please go to ~/.config/bashcards/decksavelocation\n");
     drawLine (100);
+#endif 
 }
 
 int countHeaders(FILE *inFile){
