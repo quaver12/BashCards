@@ -81,11 +81,10 @@ int main(int argc, char *argv[]){
 
 // tests user on selected deck
 void testme(){
-    if (!listAvailableDecks()){
-        printf("unable to list available decks\n");
+    if (listAvailableDecks()){
+        printf("Unable to list available decks\n");
         return;
     }
-    printf("got here\n");
     char decksLocation[BUFFSIZE],activeDeckName[BUFFSIZE],input[BUFFSIZE];
 
     findDecks(decksLocation);
@@ -100,7 +99,7 @@ void testme(){
 
     FILE *activeDeckFile;
     if(!(activeDeckFile = fopen(activeDeckName,"r"))){
-        printf("Unable to locate that file\n");
+        printf("Unable to locate that deck file\n");
         return;
     }else
     printf("Succesffully opened!\n");
@@ -110,7 +109,7 @@ void testme(){
     struct subdeckFormat *
     subdeck = (struct subdeckFormat*) malloc (headersAmount*sizeof(struct subdeckFormat));
     if (subdeck == NULL){
-        printf("Memory Allocation Failed.");
+        printf("Memory Allocation Failed.\n");
         return;
     }
 
@@ -150,6 +149,8 @@ void help(){
 //adds questions and answers of user input to decks 
 void add(){
 	
+    // NOT CURRENTLY MAINTAINED
+
 	// 'Deck files' will be formatted the following way for BashCards:
 	//
 	// h:This is a header - headers are asked in the order they appear in the file
@@ -317,16 +318,19 @@ char *findDecks(char *output){
 #else
     //----------------Linux implementation-------------------
     char deckFilesLocation[BUFFSIZE] = {}, configFileLocation[BUFFSIZE] = {};
-    char *homeDirectory = getenv("HOME");
     FILE *configFile;
-
+    char *homeDirectory = getenv("HOME");
+    if (homeDirectory == NULL){
+        printf("Failed to identify home directory\n");
+        return NULL;
+    }
 
     strcat(configFileLocation,homeDirectory);
     strcat(configFileLocation,"/.config/bashcards/decksavelocation");
 
     //open the config file with the deck save locations
     if (!(configFile = fopen(configFileLocation,"r"))){
-        printf("Failed to Locate config file 'decksavelocation'.");
+        printf("Unable to open ~/.config/bashcards/decksavelocation\n - Fix or reinstallation required.\n");
         return NULL;
     }
     fgets(deckFilesLocation,BUFFSIZE,configFile);
@@ -354,19 +358,18 @@ int listAvailableDecks(){
     //---------------Linux Implementation-------------------
     char decksLocation[BUFFSIZE];
     if (!findDecks(decksLocation)){
-        printf("Failed during listAvailableDecks at findDecks(deckLocation)\n");
+        printf("Unable to locate deck save location. Please set deck save location in ~/.config/bashcards/decksavelocation\n");
         return -1;
     }
-    printf("Downloaded decks available at %s are as follows:\n\n",decksLocation);
 
     DIR *decksDirectory;
     if (!(decksDirectory = opendir(decksLocation))){
-        printf("Failed during listAvailableDecks at opedndir(decksLocations)\n");
+        printf("Unable to open %s\nIf this is the incorrect save location for your decks, please change this at ~/.config/bashcards/decksavelocation\n",decksLocation);
         return -1;
     }
     struct dirent* individualFiles;
 
-    printf("got here in func\n");
+    printf("Downloaded decks available at %s are as follows:\n\n",decksLocation);
     while (individualFiles = readdir(decksDirectory))
         printf(" - %s\n",individualFiles->d_name);
 
