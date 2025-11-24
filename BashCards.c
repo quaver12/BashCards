@@ -13,13 +13,14 @@
 //  - use pointer notation when handling subdeck?
 
 // FOR NEXT TIME
-//  - univserally agree on succesful and unseccuesfful return values
-//  - prevent crash if decks cannot be located - prevent all seg dumps where able
+//
 //  - sort out flag options
+//    - improve main() to be more modular
 //  - add windows preprocessors and ability.
 //  - add windows installation option
 //  - allow for running decks in decks directory without having to put '.txt' on end
 //  - also allow you to run any deck file in active directory but putting '.txt' on end.
+//  - only see .txt files in directory
 //  - running just 'bcards' will just list avalailable decks
 //  - add a couple of example decks for publishing with files
 //  - let user pass in deck name as argument from command line
