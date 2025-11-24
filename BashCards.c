@@ -13,9 +13,11 @@
 //  - use pointer notation when handling subdeck?
 
 // FOR NEXT TIME
+//  - univserally agree on succesful and unseccuesfful return values
+//  - prevent crash if decks cannot be located - prevent all seg dumps where able
+//  - sort out flag options
 //  - add windows preprocessors and ability.
 //  - add windows installation option
-//  - prevent crash if decks cannot be located - prevent all seg dumps where able
 //  - allow for running decks in decks directory without having to put '.txt' on end
 //  - also allow you to run any deck file in active directory but putting '.txt' on end.
 //  - running just 'bcards' will just list avalailable decks
@@ -40,7 +42,7 @@ int isCorrect(const char userAns[], const char correctAns[], int uaLen, int caLe
 
 // ------------------------------------------ Program Specific Functions -----------------------------------------
 char *findDecks(char *deckFilesDirectory); // locates the file location of the downloaded decks. Dictated by .config file.
-void listAvailableDecks(); // Prints the the downloaded decks in the default deck location to the shell.
+int listAvailableDecks(); // Prints the the downloaded decks in the default deck location to the shell.
 int countHeaders(FILE *inFile); // counts the number of headers/subdecks in file. resets fgets count of file at end.
 struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile); // returns an array of each 'subdeck' in a file (containing 1 header, the number of questions, and all questions in that header)
 struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
@@ -79,8 +81,11 @@ int main(int argc, char *argv[]){
 
 // tests user on selected deck
 void testme(){
-    listAvailableDecks();
-
+    if (!listAvailableDecks()){
+        printf("unable to list available decks\n");
+        return;
+    }
+    printf("got here\n");
     char decksLocation[BUFFSIZE],activeDeckName[BUFFSIZE],input[BUFFSIZE];
 
     findDecks(decksLocation);
@@ -336,7 +341,7 @@ char *findDecks(char *output){
 #endif 
 }
 
-void listAvailableDecks(){
+int listAvailableDecks(){
 
 #ifdef _WIN32
     //---------------Windows Implementation-------------------
@@ -348,19 +353,27 @@ void listAvailableDecks(){
 #else
     //---------------Linux Implementation-------------------
     char decksLocation[BUFFSIZE];
-    findDecks(decksLocation);
+    if (!findDecks(decksLocation)){
+        printf("Failed during listAvailableDecks at findDecks(deckLocation)\n");
+        return -1;
+    }
     printf("Downloaded decks available at %s are as follows:\n\n",decksLocation);
 
     DIR *decksDirectory;
-    decksDirectory = opendir(decksLocation);
+    if (!(decksDirectory = opendir(decksLocation))){
+        printf("Failed during listAvailableDecks at opedndir(decksLocations)\n");
+        return -1;
+    }
     struct dirent* individualFiles;
 
+    printf("got here in func\n");
     while (individualFiles = readdir(decksDirectory))
         printf(" - %s\n",individualFiles->d_name);
 
     closedir(decksDirectory);
     printf("\nIf you wish to change your deck save location please go to ~/.config/bashcards/decksavelocation\n");
     drawLine (100);
+    return 0;
 #endif 
 }
 
