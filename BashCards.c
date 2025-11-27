@@ -16,8 +16,6 @@
 
 // FOR NEXT TIME
 //
-//  - sort out flag options
-//    - improve main() to be more modular
 //  - add windows preprocessors and ability.
 //  - add windows installation option
 //  - allow for running decks in decks directory without having to put '.txt' on end
@@ -50,7 +48,7 @@ struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile)
 struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
 void listHeaders (struct subdeckFormat *subdeck, int headersAmount); // Lists the headers of the active subdeck.
 int askQuestions(struct subdeckFormat *subdeck, int subdeckToAsk); // asks questions of one specific subdeck (passed into function). Returns 0 if worked normally. Returns different values if user has used a 'command';
-
+int setSaveToWorkingDir(); // does what it says on the tin. -1 for fail 0 for success.
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
 void testme();         // tests the user on a deck of flashcards. -- Working
 void help();           // Gives a quick help option for users. -- Not Started
@@ -74,10 +72,11 @@ int main(int argc, char *argv[]){
     while (-1 != (c = getopt_long (argc,argv,"sf",longOptions, &optionIndex))){
         switch(c){
             case 's':
-                printf("s flag found.\n");
+                setSaveToWorkingDir();
                 break;
             case 'f':
-                printf("f flag found. Printing file path\n");
+                char s[BUFFSIZE];
+                printf("%s\n",findDecks(s));
                 break;
         }
     }
@@ -415,5 +414,15 @@ int askQuestions(struct subdeckFormat *subdeck, int s){
     printf("End of questions.\n");
     return -1;
 }
+
+
+int setSaveToWorkingDir(){
+
+    printf("Setting save to working directory - function not currently completed.\n");
+
+
+}
+
+
 
 
