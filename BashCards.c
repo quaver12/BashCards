@@ -4,10 +4,12 @@
 #include <time.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <getopt.h>
 
 #define BUFFSIZE 300
 
 // IMPROVEMENTS I COULD MAKE TO PROGRAM
+//  - put all deck functions into headers - 'bcdeck.h'
 //  - just pass around pointers when shuffling instead of using strcpy
 //  - rename buffsize buffmax or maxbuff
 //  - use pointer notation when handling subdeck?
@@ -39,7 +41,6 @@ int countFileLines(char *fileName); // counts number of lines in .txt file. Retu
 void drawLine(int lineLength); // Draws a line of hyphons ending with \n.
 char *shiftArray(char *array, int bufferSize, int shiftAmt); // shifts each element of array by shiftAmt. Right if positive left if negative. Returns array
 char *newLineToNull(char *string); // replaces first '\n' found with '\0'. Returns same string passed in.
-int isCorrect(const char userAns[], const char correctAns[], int uaLen, int caLen); // Propietry Fuzzy matcher. Returns true or false. Still work in progress.
 
 // ------------------------------------------ Program Specific Functions -----------------------------------------
 char *findDecks(char *deckFilesDirectory); // locates the file location of the downloaded decks. Dictated by .config file.
@@ -53,27 +54,36 @@ int askQuestions(struct subdeckFormat *subdeck, int subdeckToAsk); // asks quest
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
 void testme();         // tests the user on a deck of flashcards. -- Working
 void help();           // Gives a quick help option for users. -- Not Started
-void add();            // User can make a deck by adding flashcards. -- Needs remaking
 void decks();          // Lists available decks -- Not Started
 
 //---------------------------------------------- App Mode Selection ----------------------------------------------
 
 int main(int argc, char *argv[]){
 
-    if (argc == 1){
-        testme(); // run testme by default
+    int fFlag = 0; // make program just output the deck save location
+    int sFlag = 0; // set deck save location to working directory
+    int opterr = 0;
+    int c;
+    int optionIndex = 0;
 
-    }else if (strcmp(argv[1],"-f")==0 || strcmp(argv[1],"-files")==0){
-        //just outputs the location of your set deck save location
-        char decksLocation[BUFFSIZE];
-        printf("%s\n",findDecks(decksLocation));
-    }else if (strcmp(argv[1],"testme")==0){
-        //asks practice questions from chosen deck of flashcards
-        testme();
+    struct option longOptions[] = {
+        {"file-path",no_argument,0,'f'},
+        {"set-save",no_argument,0,'s'}
+    };
 
-    }else{
-        printf("Unknown BashCards command. Please try again.\n");
+    while (-1 != (c = getopt_long (argc,argv,"sf",longOptions, &optionIndex))){
+        switch(c){
+            case 's':
+                printf("s flag found.\n");
+                break;
+            case 'f':
+                printf("f flag found. Printing file path\n");
+                break;
+        }
     }
+
+    if (optind == 1) // run bcards normally if no flags found
+        testme();
 
     return EXIT_SUCCESS;
 }
@@ -114,7 +124,13 @@ void testme(){
         return;
     }
 
+    if (activeDeckFile == NULL){
+        printf("File == NULL. Terminating.\n");
+        return;
+    }
     buildSubdecks(subdeck, activeDeckFile);
+    fclose(activeDeckFile);
+    
     shuffleSubdecks(subdeck, headersAmount);
 
     listHeaders(subdeck, headersAmount);
@@ -138,7 +154,6 @@ void testme(){
     }
 
     free(subdeck);
-    fclose(activeDeckFile);
 }
 
 
@@ -147,73 +162,6 @@ void help(){
     printf("help()\n");
 }
 
-//adds questions and answers of user input to decks 
-void add(){
-	
-    // NOT CURRENTLY MAINTAINED
-
-	// 'Deck files' will be formatted the following way for BashCards:
-	//
-	// h:This is a header - headers are asked in the order they appear in the file
-	// q:This is a question - all questions within each header are shuffled when asked with testme().
-	// a:This is the answer to the question above! Answers are specific and case sensitive at the minute.
-	//  - The line after an answer is the explanation for the answer, no specific formatting needed - everything on this line will be printed.
-	//        Also as long as a line isn't following an answer and doesn't have a line type prefix, it will be ignored.
-	//        This means you can edit a file with comments like this.
-	// h: Example questions
-	// q:True or False: The capital of Turkey is Constantinople.
-	// a:False
-	//  -> It's Istanbul not Constantinople!
-	// q:What was the previous name of the city now called New York.
-	// a:New Amsterdam
-	// 	- New York was once a Dutch settlement before being taken by the English military in 1664.
-
-	char decksLocation[BUFFSIZE];
-	findDecks(decksLocation);
-	
-	char activeDeckName[BUFFSIZE];
-	printf("Which deck file from /decks would you like to add to?\nInputting unregonised file name will make a new deck with that name.\n");
-
-	char input[BUFFSIZE];
-	scanf("%s",&input);
-
-	strcat(activeDeckName,decksLocation);
-	strcat(activeDeckName,"/");
-	strcat(activeDeckName,input);
-
-	printf("Opening %s...\n", activeDeckName);
-
-	FILE *activeDeckFile;
-	activeDeckFile = fopen(activeDeckName,"a");
-
-	printf("Enter the question you'd like to ask! (start line with :h for header)\n");
-	
-	fgets(input, sizeof(input), stdin);
-	
-	//if header tag seen only add first line
-	if (input[0]=='h' && input[1]==':'){
-		fprintf(activeDeckFile, "\n%s\n",input);
-			
-	//if h: not seen, prompt user for q and a
-	}else{
-
-		fprintf(activeDeckFile, "q:%s",input);
-
-		printf("Enter the specific answer you're looking for:\n");
-		fgets(input, sizeof(input), stdin);
-		fprintf(activeDeckFile, "a:%s",input);
-
-		printf("Enter any explanation you'd like about the answer.\n");
-		fgets(input, sizeof(input), stdin);
-		fprintf(activeDeckFile, " - %s",input);
-
-
-	}
-
-	printf("Flashcard saved and editable in %s\n",activeDeckName);
-		
-        fclose(activeDeckFile);
-}
 
 // lists all downloaded decks (.txt files in decks/)
 void decks(){
@@ -221,36 +169,7 @@ void decks(){
 }
 
 
-
-
-
 // ------------------------------------------ General Utility Functions ------------------------------------------
-// Returns number of lines in a .txt file
-int countFileLines(char *fileName){
-    // Counts numbers of lines in txt file by counting number of '\n's used.
-
-    FILE *readInFile;
-    if(!(readInFile = fopen(fileName,"r"))){
-        printf("Failed to open %s during countFileLines.",fileName);
-        return 0;
-    }
-
-    int lines = 0, character;
-
-    while ((character = fgetc(readInFile)) != EOF)
-        if (character == '\n')
-            lines++;
-
-    fclose(readInFile);
-    return lines;
-}
-
-// Just draws a line of hyphons finishing with \n
-void drawLine(int lineLength){
-    while (lineLength--)
-        printf("-");
-    printf("\n");
-}
 
 //Shifts each element of array by amount
     //Right if positive left if negative
@@ -269,38 +188,19 @@ char *shiftArray(char *arrayLocation, int bufferSize, int shiftAmt){
     return arrayLocation;
 }
 
+// Just draws a line of hyphons finishing with \n
+void drawLine(int lineLength){
+    while (lineLength--)
+        printf("-");
+    printf("\n");
+}
+
 //replaces the first \n found in string with \0
 char *newLineToNull(char *string){
     while (*string++)
         if (*string == '\n')
             *string = '\0';
     return string;
-}
-
-//proprietry fuzzy matcher - checks if userAns is close enough to correctAns
-//returns true or false
-int isCorrect(const char userAns[], const char correctAns[], int uaLen, int caLen){
-	//if character in userAns is present in correctAns, increase score by 1
-	//if at the end score is at least 75% of the correctanswer's length, return true
-	int score = 0;
-
-	for (int i = 0 ; i < uaLen ; i ++){
-		for (int j = 0 ; j < caLen ; j++){
-			if (userAns[i] == correctAns[j]){
-				score++;
-				j = caLen;
-			}
-		}
-	}
-	printf("score is: %d\n", score);
-
-
-	if (score>=((caLen/4)*3))
-		return true;
-	else
-		return false;
-
-	
 }
 
 
@@ -347,7 +247,11 @@ char *findDecks(char *output){
 }
 
 int listAvailableDecks(){
-
+    //rewrite to also take input of an array, and return a pointer to that array.
+    // - make array miss files that start with '.'
+    // - make array only print .txt files
+    // - make array remove '.txt' from those files
+    
 #ifdef _WIN32
     //---------------Windows Implementation-------------------
 
