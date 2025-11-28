@@ -15,8 +15,7 @@
 //  - rename buffsize buffmax or maxbuff
 //  - use pointer notation when handling subdeck?
 
-// FOR NEXT TIME
-//
+// NEXT TIMES
 //  - add windows preprocessors and ability.
 //  - add windows installation option
 //  - allow for running decks in decks directory without having to put '.txt' on end
@@ -115,6 +114,11 @@ void testme(){
         return;
     }
     sprintf(activeDeckName,"%s/%s",decksLocation,arrayOfDecks[inD-1]);
+
+    //free memory allocated by listAvailableDecks
+    for (int i=0; arrayOfDecks[i] ; i++)
+        free(arrayOfDecks[i]);
+    free(arrayOfDecks);
 
     printf("Opening %s...\n", activeDeckName);
 
@@ -285,6 +289,7 @@ char **listAvailableDecks(){
     while(individualFiles = readdir(decksDirectory))
         if (individualFiles->d_name[0] != '.')
             count++;
+        count++; // one extra for null character terminating array
     rewinddir(decksDirectory);
 
     char **deckArr = (char **)malloc(count * sizeof(char *));
@@ -309,6 +314,7 @@ char **listAvailableDecks(){
             i++;
         }
     }
+    deckArr[i]=NULL; // make the array null terminated
     closedir(decksDirectory);
     
     for (int j; j< i; j++)
