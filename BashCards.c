@@ -9,6 +9,7 @@
 #define BUFFSIZE 300
 
 // IMPROVEMENTS I COULD MAKE TO PROGRAM
+//  - I think im just allocating the array of pointers that holds q&a&etc, not actual space for the whole question strings
 //  - put all deck functions into headers - 'bcdeck.h'
 //  - just pass around pointers when shuffling instead of using strcpy
 //  - rename buffsize buffmax or maxbuff
@@ -42,7 +43,7 @@ char *newLineToNull(char *string); // replaces first '\n' found with '\0'. Retur
 
 // ------------------------------------------ Program Specific Functions -----------------------------------------
 char *findDecks(char *deckFilesDirectory); // locates the file location of the downloaded decks. Dictated by .config file.
-int listAvailableDecks(); // Prints the the downloaded decks in the default deck location to the shell.
+char **listAvailableDecks(); // Prints the the downloaded decks in the default deck location to the shell.
 int countHeaders(FILE *inFile); // counts the number of headers/subdecks in file. resets fgets count of file at end.
 struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile); // returns an array of each 'subdeck' in a file (containing 1 header, the number of questions, and all questions in that header)
 struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
@@ -91,19 +92,29 @@ int main(int argc, char *argv[]){
 
 // tests user on selected deck
 void testme(){
-    if (listAvailableDecks()){
+
+
+    
+    //count available decks - dynamically allocate memory - build list of decks
+    char **arrayOfDecks;
+    if (NULL == (arrayOfDecks = listAvailableDecks())){
         printf("Unable to list available decks\n");
         return;
     }
-    char decksLocation[BUFFSIZE],activeDeckName[BUFFSIZE],input[BUFFSIZE];
+
+    char decksLocation[BUFFSIZE],activeDeckName[BUFFSIZE];
 
     findDecks(decksLocation);
 
-    printf("Which deck file would you like to be tested on? Please enter full file name: ");
-    fgets(input, sizeof(input), stdin);
-    newLineToNull(input);
-
-    sprintf(activeDeckName,"%s/%s",decksLocation,input);
+    printf("Please enter the number of the deck you'd like to be tested on: ");
+    char inC[BUFFSIZE];
+    int inD;
+    fgets(inC, sizeof(inC), stdin);
+    if (0==(inD = atoi(inC))){
+        printf("Invalid entry\n");
+        return;
+    }
+    sprintf(activeDeckName,"%s/%s",decksLocation,arrayOfDecks[inD-1]);
 
     printf("Opening %s...\n", activeDeckName);
 
@@ -161,17 +172,15 @@ void help(){
     printf("help()\n");
 }
 
-
 // lists all downloaded decks (.txt files in decks/)
 void decks(){
 	printf("deck()");
 }
 
-
 // ------------------------------------------ General Utility Functions ------------------------------------------
 
 //Shifts each element of array by amount
-    //Right if positive left if negative
+   //Right if positive left if negative
     // - leaves elements in place if no number is being shifted to it.
     // - making shiftAmt more than buffer should on paper not do anything
     //   - I have not fully tested this so I do not recommend.
@@ -245,7 +254,7 @@ char *findDecks(char *output){
 #endif 
 }
 
-int listAvailableDecks(){
+char **listAvailableDecks(){
     //rewrite to also take input of an array, and return a pointer to that array.
     // - make array miss files that start with '.'
     // - make array only print .txt files
@@ -254,33 +263,60 @@ int listAvailableDecks(){
 #ifdef _WIN32
     //---------------Windows Implementation-------------------
 
-
     // add code here
-
 
 #else
     //---------------Linux Implementation-------------------
     char decksLocation[BUFFSIZE];
     if (!findDecks(decksLocation)){
         printf("Unable to locate deck save location. Please set deck save location in ~/.config/bashcards/decksavelocation\n");
-        return -1;
+        return NULL;
     }
 
     DIR *decksDirectory;
     if (!(decksDirectory = opendir(decksLocation))){
         printf("Unable to open %s\nIf this is the incorrect save location for your decks, please change this at ~/.config/bashcards/decksavelocation\n",decksLocation);
-        return -1;
+        return NULL;
     }
     struct dirent* individualFiles;
 
-    printf("Downloaded decks available at %s are as follows:\n\n",decksLocation);
-    while (individualFiles = readdir(decksDirectory))
-        printf(" - %s\n",individualFiles->d_name);
+    //work out amount of memory needed for allocation
+    int count = 0;
+    while(individualFiles = readdir(decksDirectory))
+        if (individualFiles->d_name[0] != '.')
+            count++;
+    rewinddir(decksDirectory);
 
+    char **deckArr = (char **)malloc(count * sizeof(char *));
+    if (deckArr == NULL){
+        printf("Memory Allocation Failed.\n");
+        return NULL;
+    }
+
+    printf("Downloaded decks available at %s are as follows:\n\n",decksLocation);
+    //build the array
+    int i = 0;
+    while (individualFiles = readdir(decksDirectory)){
+        //if it doesn't start with '.'     and as long as it ends  with '.txt'
+        if (individualFiles->d_name[0] != '.'){
+            deckArr[i] = malloc (300 * sizeof(char));
+            if (deckArr[i] == NULL){
+                printf("Memory Allocation Failed.\n");
+                return NULL;
+            }
+            strcpy(deckArr[i],individualFiles->d_name);
+            //printf("%s\n",deckArr[i]);
+            i++;
+        }
+    }
     closedir(decksDirectory);
+    
+    for (int j; j< i; j++)
+        printf("%d - %s\n",j+1,deckArr[j]);
+
     printf("\nIf you wish to change your deck save location please go to ~/.config/bashcards/decksavelocation\n");
     drawLine (100);
-    return 0;
+    return deckArr; // return pointer to the allocate memory
 #endif 
 }
 
