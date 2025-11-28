@@ -8,7 +8,7 @@
 
 #define BUFFSIZE 300
 
-// IMPROVEMENTS I COULD MAKE TO PROGRAM
+// BROADER IMPROVEMENTS I COULD MAKE TO PROGRAM
 //  - I think im just allocating the array of pointers that holds q&a&etc, not actual space for the whole question strings
 //  - put all deck functions into headers - 'bcdeck.h'
 //  - just pass around pointers when shuffling instead of using strcpy
@@ -16,14 +16,20 @@
 //  - use pointer notation when handling subdeck?
 
 // NEXT TIMES
+//
+//  - create header files and separate code
+//  - make different functions for windows specific implementation.
 //  - add windows preprocessors and ability.
 //  - add windows installation option
-//  - allow for running decks in decks directory without having to put '.txt' on end
-//  - also allow you to run any deck file in active directory but putting '.txt' on end.
+//  - listAvailable decks only to dispay .txt files
+//  - remove '.txt' from listAvailableDecks output
+//
 //  - only see .txt files in directory
-//  - running just 'bcards' will just list avalailable decks
 //  - add a couple of example decks for publishing with files
+//
+//  - also allow you to run any deck file in active directory but putting '.txt' on end.
 //  - let user pass in deck name as argument from command line
+//  - allow for running decks in decks directory without having to put '.txt' on end
 
 // A 'subdeck' has one header (h:) and then all the questions/answers/explanations until the next header. Questions are randomised within a subdeck.
 struct subdeckFormat{
@@ -42,7 +48,7 @@ char *newLineToNull(char *string); // replaces first '\n' found with '\0'. Retur
 
 // ------------------------------------------ Program Specific Functions -----------------------------------------
 char *findDecks(char *deckFilesDirectory); // locates the file location of the downloaded decks. Dictated by .config file.
-char **listAvailableDecks(); // Prints the the downloaded decks in the default deck location to the shell.
+char **listAvailableDecks(); // Prints the the downloaded decks in the default deck location to the shell. MEMORY ALLOCATED DURING FUNCTION - BE SURE TO FREE THIS
 int countHeaders(FILE *inFile); // counts the number of headers/subdecks in file. resets fgets count of file at end.
 struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile); // returns an array of each 'subdeck' in a file (containing 1 header, the number of questions, and all questions in that header)
 struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
@@ -52,14 +58,11 @@ int setSaveToWorkingDir(); // does what it says on the tin. -1 for fail 0 for su
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
 void testme();         // tests the user on a deck of flashcards. -- Working
 void help();           // Gives a quick help option for users. -- Not Started
-void decks();          // Lists available decks -- Not Started
 
 //---------------------------------------------- App Mode Selection ----------------------------------------------
 
 int main(int argc, char *argv[]){
 
-    int fFlag = 0; // make program just output the deck save location
-    int sFlag = 0; // set deck save location to working directory
     int opterr = 0;
     int c;
     int optionIndex = 0;
@@ -174,11 +177,6 @@ void testme(){
 // Incomplete
 void help(){
     printf("help()\n");
-}
-
-// lists all downloaded decks (.txt files in decks/)
-void decks(){
-	printf("deck()");
 }
 
 // ------------------------------------------ General Utility Functions ------------------------------------------
