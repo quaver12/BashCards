@@ -7,15 +7,6 @@
 #include <getopt.h>
 #include "bcutil.h"
 
-// A 'subdeck' has one header (h:) and then all the questions/answers/explanations until the next header. Questions are randomised within a subdeck.
-struct subdeckFormat{
-    char header[BUFFSIZE];
-    int questionAmount;
-    char question[BUFFSIZE][BUFFSIZE]; // array of strings
-    char answer[BUFFSIZE][BUFFSIZE];
-    char explanation[BUFFSIZE][BUFFSIZE];
-};
-
 // ------------------------------------------ Program Specific Functions -----------------------------------------
 
 char *findDecks(char *output){

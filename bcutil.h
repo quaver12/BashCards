@@ -7,4 +7,6 @@ void drawLine(int lineLength); // Draws a line of hyphons ending with \n.
 char *shiftArray(char *array, int bufferSize, int shiftAmt); // shifts each element of array by shiftAmt. Right if positive left if negative. Returns array
 char *newLineToNull(char *string); // replaces first '\n' found with '\0'. Returns same string passed in.
 
+const int BUFFSIZE = 300;
+
 #endif
