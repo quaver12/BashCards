@@ -100,6 +100,7 @@ char **listAvailableDecks(){
                 return NULL;
             }
             strcpy(deckArr[i],individualFiles->d_name);
+            remFileSuffix(deckArr[i]);
             //printf("%s\n",deckArr[i]);
             i++;
         }

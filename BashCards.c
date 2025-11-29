@@ -16,10 +16,7 @@
 //  - make different functions for windows specific implementation.
 //  - add windows preprocessors and ability.
 //  - add windows installation option
-//  - listAvailable decks only to dispay .txt files
-//  - remove '.txt' from listAvailableDecks output
 //
-//  - only see .txt files in directory
 //  - add a couple of example decks for publishing with files
 //
 //  - also allow you to run any deck file in active directory but putting '.txt' on end.
@@ -88,7 +85,7 @@ void testme(){
         printf("Invalid entry\n");
         return;
     }
-    sprintf(activeDeckName,"%s/%s",decksLocation,arrayOfDecks[inD-1]);
+    sprintf(activeDeckName,"%s/%s.txt",decksLocation,arrayOfDecks[inD-1]);
 
     //free memory allocated by listAvailableDecks
     for (int i=0; arrayOfDecks[i] ; i++)

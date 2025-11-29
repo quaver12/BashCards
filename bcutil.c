@@ -47,3 +47,15 @@ bool isFileType (char *fileName, char* fileSuffix){
             return false;
     return true;
 }
+
+char *remFileSuffix (char *fileName){
+
+    int i;
+    for (i = 0;fileName[i];i++)
+        ;
+    for (;fileName[i]!='.';i--)
+        ;
+    fileName[i]='\0';
+    return fileName;
+
+}
