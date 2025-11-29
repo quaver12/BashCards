@@ -93,7 +93,7 @@ char **listAvailableDecks(){
     int i = 0;
     while (individualFiles = readdir(decksDirectory)){
         //if it doesn't start with '.'     and as long as it ends  with '.txt'
-        if (individualFiles->d_name[0] != '.'){
+        if (individualFiles->d_name[0] != '.' && isFileType(individualFiles->d_name,".txt")){
             deckArr[i] = malloc (300 * sizeof(char));
             if (deckArr[i] == NULL){
                 printf("Memory Allocation Failed.\n");

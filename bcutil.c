@@ -34,4 +34,16 @@ char *newLineToNull(char *string){
     return string;
 }
 
+bool isFileType (char *fileName, char* fileSuffix){
 
+    int i,j;
+
+    for (i=0;fileName[i];i++)
+        ;
+    for (j=0;fileSuffix[j];j++)
+        ;
+    for (;j>=0;i--,j--)
+        if (fileName[i]!=fileSuffix[j])
+            return false;
+    return true;
+}
