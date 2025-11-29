@@ -1,10 +1,5 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
-#include <dirent.h>
-#include <getopt.h>
+#include "bcutil.h"
 // ------------------------------------------ General Utility Functions ------------------------------------------
 
 //Shifts each element of array by amount

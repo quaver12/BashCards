@@ -1,9 +1,5 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
-#include <dirent.h>
 #include <getopt.h>
 #include "bcdeck.h"
 #include "bcutil.h"
@@ -17,7 +13,6 @@
 
 // NEXT TIMES
 //
-//  - create header files and separate code
 //  - make different functions for windows specific implementation.
 //  - add windows preprocessors and ability.
 //  - add windows installation option

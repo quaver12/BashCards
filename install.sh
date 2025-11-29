@@ -1,4 +1,4 @@
-gcc -o bcards BashCards.c
+gcc -o bcards BashCards.c bcdeck.c bcutil.c
 cd decks
 pwd > decksavelocation
 mkdir ~/.config/bashcards

@@ -4,13 +4,12 @@
 #include <time.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <getopt.h>
 #include "bcutil.h"
+#include "bcdeck.h"
 
 // ------------------------------------------ Program Specific Functions -----------------------------------------
 
 char *findDecks(char *output){
-
 #ifdef _WIN32
     //----------------Windows implementation-------------------
     
