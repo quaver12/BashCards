@@ -12,6 +12,7 @@
 //  - use pointer notation when handling subdeck?
 
 // NEXT TIMES
+//  - let bcards -s set deck save location
 //
 //  - make different functions for windows specific implementation.
 //  - add windows preprocessors and ability.
@@ -123,19 +124,26 @@ void testme(){
 
     int command;
     //ask questions but checks for 'commands'
-    for (int i = 0 ; i < headersAmount ; i++){
+    for (int i = 0 ; i < headersAmount ;){
         //askQuestions returns -1 if running normally, or different if user wants to run a command.
         command = askQuestions(subdeck,i);
-        if (command){
-            drawLine(100);
-            if (command == -1){
-                listHeaders(subdeck,headersAmount);
-                i--;
-            }else if (command>headersAmount || command<1){
-                printf("That's not a valid header to skip to. Restarting current header...\n");
-                i--;
-            }else
-                i = command-2;// going to be incremented anyway
+        drawLine(100);
+        if (command>0)
+            i = command-1;
+        else{
+            switch (command){
+                case (0):
+                    i++;
+                    break;
+                case (-1): // by default askQuestions return this
+                    break; // this will restart current header
+                case (-2):
+                    listHeaders(subdeck,headersAmount);
+                    break;
+                default:
+                    printf("Not a valid header to jump to or command. Restarting current header...\n");
+                    drawLine(100);
+            }
         }
     }
 
