@@ -4,8 +4,8 @@
 #include <time.h>
 #include <unistd.h>
 #include <dirent.h>
-#include "bcutil.h"
-#include "bcdeck.h"
+#include "../include/bcutil.h"
+#include "../include/bcdeck.h"
 
 // ------------------------------------------ Program Specific Functions -----------------------------------------
 

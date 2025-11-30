@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
-#include "bcdeck.h"
-#include "bcutil.h"
+#include "../include/bcdeck.h"
+#include "../include/bcutil.h"
 
 // BROADER IMPROVEMENTS I COULD MAKE TO PROGRAM
 //  - I think im just allocating the array of pointers that holds q&a&etc, not actual space for the whole question strings
@@ -15,7 +15,6 @@
 // NEXT TIMES
 //  - sort out bcards -h
 //  - add man pages
-//  - let bcards -s set deck save location
 //
 //  - make different functions for windows specific implementation.
 //  - add windows preprocessors and ability.
@@ -186,7 +185,8 @@ void setSave(){
     
     fprintf(configFile,cwd);
     fclose(configFile);
-    printf("Set this working directory to be your new deck save location.\nYou can change this manually in ~/.config/bashcards/decksavelocation\n");
+    //consider putting this back if you use verbose setting
+    //printf("Set this working directory to be your new deck save location.\nYou can change this manually in ~/.config/bashcards/decksavelocation\n");
 }
 
 

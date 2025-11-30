@@ -1,0 +1,45 @@
+.\"Modified from man(2) of FreeBSD, the NetBSD mdoc.template, and mdoc.samples.
+.Dd  30/11/25
+.Dt bcards 1
+.Os Darwin
+.Sh NAME
+.Nm bcards
+,
+.\" The following lines are read in generating the apropos(man -k) database. Use only key
+.\" words here as the database is built based on the words here and in the .ND line.
+.Nm BashCards
+.Nd flashcards in the command line
+.Sh SYNOPSIS
+.Nm
+.Op Fl sfh
+.Sh DESCRIPTION
+.Nm
+is flashcards tool for personal revision.
+It also provides users with a way of fomatting .txt files to make their own flashcards.
+.Sh OPTIONS
+.Bl -tag -width -indent  \" Differs from above in tag removed
+.It Fl f, --file-path                 \"-a flag as a list item
+Prints the current file path of your deck save location.
+.It Fl s, --set-flag
+Sets the deck save location to the working directory.
+.El                      \" Ends the list
+.Pp
+.\" .Sh ENVIRONMENT      \" May not be needed
+.\" .Bl -tag -width "ENV_VAR_1" -indent \" ENV_VAR_1 is width of the string ENV_VAR_1
+.\" .It Ev ENV_VAR_1A
+.\" Description of ENV_VAR_1
+.\" .It Ev ENV_VAR_2
+.\" Description of ENV_VAR_2
+.\" .El
+.Sh FILES                \" File used or created by the topic of the man page
+.Bl -tag -width "/Users/joeuser/Library/really_long_file_name" -compact
+.It Pa ~/.config/bashcards/decksavelocation
+Contains the name of the directory where bcards will look for downloaded decks.
+.El                      \" Ends the list
+.Sh SEE ALSO
+.\" List links in ascending order by section, alphabetically within a section.
+.\" Please do not reference files that do not exist without filing a bug report
+.Xr https://github.com/quaver12/BashCards
+
+.\" .Sh BUGS              \" Document known, unremedied bugs
+.

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "bcutil.h"
+#include "../include/bcutil.h"
 // ------------------------------------------ General Utility Functions ------------------------------------------
 
 //Shifts each element of array by amount
