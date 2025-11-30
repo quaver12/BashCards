@@ -21,7 +21,7 @@ q:Perfect! Now let's introduce you to commands. Whenever you are prompted for an
 a:
  - 
 h:Further commands
-q:Commands are also very useful for navigating a deck. '-2:' lists all the headers in your current deck and ':' followed by the number of the header will skip to that one! Try using both of these to find and jump to the header 'JUMP POINT'.
+q:Commands are also very useful for navigating a deck. ':-2' lists all the headers in your current deck and ':' followed by the number of the header will skip to that one! Try using both of these to find and jump to the header 'JUMP POINT'.
 a:
  -
 h:JUMP BACK

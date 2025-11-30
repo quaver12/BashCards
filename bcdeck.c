@@ -249,9 +249,3 @@ int askQuestions(struct subdeckFormat *subdeck, int s){
 }
 
 
-int setSaveToWorkingDir(){
-
-    printf("Setting save to working directory - function not currently completed.\n");
-
-
-}

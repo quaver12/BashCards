@@ -21,6 +21,5 @@ struct subdeckFormat *buildSubdecks(struct subdeckFormat *subdeck, FILE *inFile)
 struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int headersAmount); // Shuffles each of the questions within each subdeck
 void listHeaders (struct subdeckFormat *subdeck, int headersAmount); // Lists the headers of the active subdeck.
 int askQuestions(struct subdeckFormat *subdeck, int subdeckToAsk); // asks questions of one specific subdeck (passed into function). Returns 0 if worked normally. Returns different values if user has used a 'command';
-int setSaveToWorkingDir(); // does what it says on the tin. -1 for fail 0 for success.
 
 #endif

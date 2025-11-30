@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <getopt.h>
 #include "bcdeck.h"
 #include "bcutil.h"
@@ -12,13 +13,15 @@
 //  - use pointer notation when handling subdeck?
 
 // NEXT TIMES
+//  - sort out bcards -h
+//  - add man pages
 //  - let bcards -s set deck save location
 //
 //  - make different functions for windows specific implementation.
 //  - add windows preprocessors and ability.
 //  - add windows installation option
 //
-//  - add a couple of example decks for publishing with files
+//  - add a couple mmore example decks for publishing with files
 //
 //  - also allow you to run any deck file in active directory but putting '.txt' on end.
 //  - let user pass in deck name as argument from command line
@@ -28,6 +31,7 @@
 // ---------------------------------------------- Primary App Modes ----------------------------------------------
 void testme();         // tests the user on a deck of flashcards. -- Working
 void help();           // Gives a quick help option for users. -- Not Started
+void setSave();        // Sets the deck save locatino to the current working directory.
 
 //---------------------------------------------- App Mode Selection ----------------------------------------------
 
@@ -39,17 +43,21 @@ int main(int argc, char *argv[]){
 
     struct option longOptions[] = {
         {"file-path",no_argument,0,'f'},
-        {"set-save",no_argument,0,'s'}
+        {"set-save",no_argument,0,'s'},
+        {"help",no_argument,0,'h'}
     };
 
-    while (-1 != (c = getopt_long (argc,argv,"sf",longOptions, &optionIndex))){
+    while (-1 != (c = getopt_long (argc,argv,"sfh",longOptions, &optionIndex))){
         switch(c){
             case 's':
-                setSaveToWorkingDir();
+                setSave();
                 break;
             case 'f':
                 char s[BUFFSIZE];
                 printf("%s\n",findDecks(s));
+                break;
+            case 'h':
+                printf("Help function not yet completed\n");
                 break;
         }
     }
@@ -157,7 +165,29 @@ void help(){
 }
 
 
+void setSave(){
+    //sets the deck save location to the current working directory of bcards.
+    char cwd[BUFFSIZE];
+    getcwd(cwd,BUFFSIZE);
 
+    char configFileLocation[BUFFSIZE];
+    sprintf(configFileLocation,"%s/.config/bashcards/decksavelocation",getenv("HOME"));
+
+    FILE *configFile;
+    if(!(configFile= fopen(configFileLocation,"w"))){
+        printf("Unable to locate  ~/.config/bashcards/decksavelocation. Please manually fix or reinstall.\n");
+        return;
+    }
+
+    if (!configFile){
+        printf("configFile == NULL. Terminating");
+        return;
+    }
+    
+    fprintf(configFile,cwd);
+    fclose(configFile);
+    printf("Set this working directory to be your new deck save location.\nYou can change this manually in ~/.config/bashcards/decksavelocation\n");
+}
 
 
 
