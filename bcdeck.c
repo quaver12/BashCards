@@ -216,7 +216,7 @@ void listHeaders (struct subdeckFormat *subdeck, int sNum){
     for (int i = 0 ; i < sNum ; i++){
         printf(" - %d: %s\n",i+1,subdeck[i].header);
     }
-    printf("\nType : followed by a number to skip to that header.\n:0 skips to the next header and :-1 lists all headers again!\nUSING ANY COMMAND WILL ERASE ANY CURRENT PROGRESS\n");
+    printf("\nuse :{n} to skip to header {n}\n:0 = skip to the next header     :-1 = restart current header     :-2 = lists all headers & restarts current\n");
     drawLine(100);
 }
 
@@ -224,7 +224,7 @@ int askQuestions(struct subdeckFormat *subdeck, int s){
     // asks questions
     // notably returns NULL if worked successfully, or
     char input[BUFFSIZE];
-    printf("Section %d: %s\n",s+1,subdeck[s].header);
+    printf("Header %d: %s\n",s+1,subdeck[s].header);
     drawLine(100);
     for (int i = 0 ; i<subdeck[s].questionAmount ; i++){
 
@@ -244,7 +244,7 @@ int askQuestions(struct subdeckFormat *subdeck, int s){
         printf("%s\n",subdeck[s].explanation[i]);
         drawLine(100);
     }
-    printf("End of questions.\n");
+    printf("End of header. Restarting.\n");
     return -1;
 }
 
