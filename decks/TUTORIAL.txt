@@ -1,0 +1,34 @@
+h:Welcome to BashCards! (start here)
+q:Welcome to BashCards! Don't worry about anything printed above, but try to read all and follow from this point. By the end of this tutorial you should know all the basics and how to quiz yourself on flashcards. Type ':0' to continue.
+a:You've got this
+ - 
+h:A BashCards deck is broken down into multiple 'headers' which contain your flashcards - this is a header!
+q:And this is a question! After any question you will be prompted to enter an answer (like right now). Lets give this a shot in header 3. Type ':0' to get there.
+a:
+ -
+h:Answer these example questions! When you're done, type ':0' to progress to next section.
+q:How many days are in January?
+a:31
+ - One of the long ones.
+q:In what year did the Battle of Hastings take place?
+a:1066
+ - The battle between the Norman-French army led by William the Conqueror and the English army led by Harold Godwinson. A decisive Norman Victory.
+q:True of False? York is further north than Lancaster.
+a:False
+ - Lancaster is further North than York - though not by a lot! If you typed 'false', you'll realise at this point answers are case-sensitive.
+h:Introduction to commands
+q:Perfect! Now let's introduce you to commands. Whenever you are prompted for an answer, you can instead type a colon followed by a number. E.g. ':0' - you've already been using this command to skip to the next header. Use it again now!
+a:
+ - 
+h:Further commands
+q:Commands are also very useful for navigating a deck. '-2:' lists all the headers in your current deck and ':' followed by the number of the header will skip to that one! Try using both of these to find and jump to the header 'JUMP POINT'.
+a:
+ -
+h:JUMP BACK
+q:You now have everything necessary to use decks and quiz yourself on flashcards! Feel free to check out any of the example decks downloaded with the program and open DECKFORMATGUIDE.txt in a text editor to see how to go about making your own decks! :0 to continue.
+h:Final Word
+q:More than anything: I hope you find this project useful! If you get stuck at any point, consult the man pages or bcards --help. Best of luck learning!
+h:JUMP POINT
+q:Perfect! You can read about all available commands by running 'bcards --help' in your terminal. Now jump back to the header 'JUMP BACK' to continue the tutorial.
+a:
+ -

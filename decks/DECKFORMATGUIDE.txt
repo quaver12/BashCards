@@ -1,0 +1,21 @@
+h:This is a header - headers are asked in the order they appear in the file
+q:This is a question - all questions within each header are shuffled.
+a:A question must be followed by an answer - like this! Answers are specific and case sensitive.
+ - The line after an answer is the explanation for the answer, no specific formatting needed - everything on this line will be printed
+
+        Also as long as a line isn't following an answer and doesn't have a line type prefix, it will be ignored.
+        This means you can edit a deck file with comments like this.
+        Note: always be sure to leave a line after an answer line for the explanation. Even if you don't want to write anything in it, just leave it empty.
+        This is because anything on the line below an answer will get interpreted as the explanation, and will be printed.
+
+h:Example questions
+q:True or False: The capital of Turkey is Constantinople.
+a:False
+  -> It's Istanbul not Constantinople!
+q:What was the previous name of the city now called New York.
+a:New Amsterdam
+- New York was once a Dutch settlement before being taken by the English military in 1664.
+
+
+q::   <<-- be sure to never write a question like this with another colon after the q: prefix.
+            (a user will never be able to answer it because bcards will assume the user is writing a command)
