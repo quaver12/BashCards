@@ -111,7 +111,7 @@ char **listAvailableDecks(){
     for (int j; j< i; j++)
         printf("%d - %s\n",j+1,deckArr[j]);
 
-    printf("\nIf you wish to change your deck save location please go to ~/.config/bashcards/decksavelocation\n");
+    printf("\nIf you wish to change your deck save location please run 'bcards --set-save' in the desired deck save location\nor change manually in ~/.config/bashcards/decksavelocation\n");
     drawLine (100);
     return deckArr; // return pointer to the allocate memory
 #endif 
