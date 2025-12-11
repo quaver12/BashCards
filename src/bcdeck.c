@@ -109,7 +109,7 @@ char **listAvailableDecks(){
     closedir(decksDirectory);
     
     for (int j; j< i; j++)
-        printf("%d - %s\n",j+1,deckArr[j]);
+        printf(" %d - %s\n",j+1,deckArr[j]);
 
     printf("\nIf you wish to change your deck save location please run 'bcards --set-save' in the desired deck save location\nor change manually in ~/.config/bashcards/decksavelocation\n");
     drawLine (100);
@@ -214,9 +214,9 @@ struct subdeckFormat *shuffleSubdecks(struct subdeckFormat *subdeck, int sdNum){
 void listHeaders (struct subdeckFormat *subdeck, int sNum){
     printf("\n");
     for (int i = 0 ; i < sNum ; i++){
-        printf(" - %d: %s\n",i+1,subdeck[i].header);
+        printf(" - %d %s\n",i+1,subdeck[i].header);
     }
-    printf("\nuse :{n} to skip to header {n}\n:0 = skip to the next header     :-1 = restart current header     :-2 = lists all headers & restarts current\n");
+    printf("\nuse :{i} to skip to header {i}       :h = help & list headers       :q to quit\n:n = next header      :p = previous header     :r = restart header\n");
     drawLine(100);
 }
 

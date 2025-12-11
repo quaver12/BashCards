@@ -155,8 +155,13 @@ void testme(){
             i = command-1;
         else{
             switch (-(command)){
+                case ('q'):
+                    return;
                 case ('n'):
                     i++;
+                    break;
+                case ('p'):
+                    i--;
                     break;
                 case ('r'): // by default askQuestions return this
                     break; // this will restart current header
@@ -164,7 +169,7 @@ void testme(){
                     listHeaders(subdeck,headersAmount);
                     break;
                 default:
-                    printf("Not a valid header to jump to or command. Restarting current header...\n");
+                    printf("Not a valid command or header to jump to. Restarting current header...\n");
                     drawLine(100);
             }
         }
