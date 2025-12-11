@@ -27,7 +27,12 @@ You can change your deck save location at any point by visiting ~/.config/bashca
 After starting bashcards, simply type the name of the deck you want to open and nail as many answers as possible!
 You can also skip between different headers at any time by writing ```:``` followed by the header name whenever prompted to answer a question. (E.g. ```:5``` will jump you to the start of header 5).
 
-Typing ```:0``` will jump to the next header and typing ```:-1``` will list all the headers you have avaliable.
+Typing ```:n``` will jump to the next header.
+This is called a command, other commands include:
+ - ```:q``` - quit
+ - ```:h``` - list all headers and help
+ - ```:r``` - restart current header
+ - ```:p``` - got to previous header
 
 **Note:** using any command with ```:``` will reset any of the progress you may have on the current header. This would only usually come if you accidentally enter one by mistake
 
