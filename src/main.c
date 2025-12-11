@@ -154,13 +154,13 @@ void testme(){
         if (command>0)
             i = command-1;
         else{
-            switch (command){
-                case (0):
+            switch (-(command)){
+                case ('n'):
                     i++;
                     break;
-                case (-1): // by default askQuestions return this
+                case ('r'): // by default askQuestions return this
                     break; // this will restart current header
-                case (-2):
+                case ('h'):
                     listHeaders(subdeck,headersAmount);
                     break;
                 default:

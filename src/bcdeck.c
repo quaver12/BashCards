@@ -233,9 +233,13 @@ int askQuestions(struct subdeckFormat *subdeck, int s){
         newLineToNull(input);
 
         if (input[0]==':'){
-            //if input is a command
             shiftArray(input,BUFFSIZE,-1);
-            return atoi(input); // returns the integer value
+            //if input is a command
+            if (0==atoi(input))
+                return -(input[0]); // returns negative value if input is a character
+            else
+                return atoi(input); // if just number, return as positive
+
         }else if (!strcmp(input,subdeck[s].answer[i]))
             printf("Correct!\n");
         else
@@ -245,7 +249,7 @@ int askQuestions(struct subdeckFormat *subdeck, int s){
         drawLine(100);
     }
     printf("End of header. Restarting.\n");
-    return -1;
+    return -'r';
 }
 
 
