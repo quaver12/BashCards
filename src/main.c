@@ -16,6 +16,22 @@
 //  - sort out bcards -h
 //  - add man pages
 //
+//  - remake command functions
+//  -   use characters instead/as well as numbers
+//  -   e.g. :-2 becomes :h
+//
+//  - :n   -next
+//  - :q   -quit
+//  - :r   -restart
+//  - :h   -help & headers
+//  - :p   -previous
+//  - :L   -loop (automatically restart same header when finished)
+//  - :l   -don't loop
+//  - :0   -return on failure?
+//
+//  - usability improvements:
+//   - make flashcards go to next automatically?
+//
 //  - make different functions for windows specific implementation.
 //  - add windows preprocessors and ability.
 //  - add windows installation option
