@@ -13,18 +13,13 @@
 //  - use pointer notation when handling subdeck?
 
 // NEXT TIMES
+//  - IMPORTANT 
+//  - make s and S flags not conflict
+//
+//
 //  - sort out bcards -h
 //  - add man pages
 //
-//  - remake command functions
-//  -   use characters instead/as well as numbers
-//  -   e.g. :-2 becomes :h
-//
-//  - :n   -next
-//  - :q   -quit
-//  - :r   -restart
-//  - :h   -help & headers
-//  - :p   -previous
 //  - :L   -loop (automatically restart same header when finished)
 //  - :l   -don't loop
 //  - :0   -return on failure?
@@ -58,14 +53,24 @@ int main(int argc, char *argv[]){
 
     struct option longOptions[] = {
         {"file-path",no_argument,0,'f'},
+        {"force-set-save",no_argument,0,'S'},
         {"set-save",no_argument,0,'s'},
         {"help",no_argument,0,'h'}
     };
 
-    while (-1 != (c = getopt_long (argc,argv,"sfh",longOptions, &optionIndex))){
+    while (-1 != (c = getopt_long (argc,argv,"sSfh",longOptions, &optionIndex))){
         switch(c){
-            case 's':
+            case 'S':
                 setSave();
+                break;
+            case 's':
+                printf("Set deck save location here? y/N ");
+                if (getchar()=='y'){
+                    setSave();
+                    printf("Successfully changed\n");
+                }
+                else
+                    printf("Cancelled\n");
                 break;
             case 'f':
                 char s[BUFFSIZE];

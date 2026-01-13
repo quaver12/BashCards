@@ -11,17 +11,21 @@
 .Nd flashcards in the command line
 .Sh SYNOPSIS
 .Nm
-.Op Fl sfh
+.Op Fl fhsS
 .Sh DESCRIPTION
 .Nm
 is flashcards tool for personal revision.
 It also provides users with a way of fomatting .txt files to make their own flashcards.
 .Sh OPTIONS
 .Bl -tag -width -indent  \" Differs from above in tag removed
-.It Fl f, --file-path                 \"-a flag as a list item
+.It Fl f, -file-path                 \"-a flag as a list item
 Prints the current file path of your deck save location.
-.It Fl s, --set-save
+.It Fl s, -set-save
 Sets the deck save location to the working directory.
+.It Fl S, -force-set-save
+Sets the deck save location to the working directory without prompting for confirmation
+.It Fl h, -help
+Prints useful help information
 .El                      \" Ends the list
 .Pp
 .\" .Sh ENVIRONMENT      \" May not be needed
