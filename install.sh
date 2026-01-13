@@ -1,4 +1,4 @@
-gcc -o bcards src/main.c src/bcdeck.c src/bcutil.c
+gcc -o bcards src/main.c src/bcdeck.c src/bcutil.c docs/help.c
 cd decks
 pwd > decksavelocation
 mkdir ~/.config/bashcards

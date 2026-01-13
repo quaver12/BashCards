@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include "../include/bcdeck.h"
 #include "../include/bcutil.h"
+#include "../include/help.h"
 
 // BROADER IMPROVEMENTS I COULD MAKE TO PROGRAM
 //  - I think im just allocating the array of pointers that holds q&a&etc, not actual space for the whole question strings
@@ -77,7 +78,7 @@ int main(int argc, char *argv[]){
                 printf("%s\n",findDecks(s));
                 break;
             case 'h':
-                printf("Help function not yet completed\n");
+                printHelp();
                 break;
         }
     }
