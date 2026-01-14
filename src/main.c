@@ -53,16 +53,20 @@ int main(int argc, char *argv[]){
     int optionIndex = 0;
 
     struct option longOptions[] = {
+        {"deck",no_argument,0,'d'},
         {"file-path",no_argument,0,'f'},
         {"force-set-save",no_argument,0,'S'},
         {"set-save",no_argument,0,'s'},
         {"help",no_argument,0,'h'}
     };
 
-    while (-1 != (c = getopt_long (argc,argv,"sSfh",longOptions, &optionIndex))){
+    while (-1 != (c = getopt_long (argc,argv,"dfhsS",longOptions, &optionIndex))){
         switch(c){
             case 'S':
                 setSave();
+                break;
+            case 'd':
+                printDeckFormatGuide();
                 break;
             case 's':
                 printf("Set deck save location here? y/N ");

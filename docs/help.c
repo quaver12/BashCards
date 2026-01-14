@@ -2,7 +2,7 @@
 
 void printHelp(){
 
-    char helpText[] = "Usage:\n  bcards [options]\n\nTest yourself on flashcards from the command line!\n\nOptions:\n  -f,--file-path\n    Prints current deck save location\n  -s,--set-save\n    Set deck save location to current working directory\n  -S,--force-set-save\n    Same as --set-save but doesn't prompt for user comfirmation\n  -h,--help\n    Displays useful help text\n\nCommands (use when running a flashcard deck):\n  :{i}\n    Skip to header number {i}\n  :h\n    List headers and display help\n  :q\n    Ruit program\n  :n  \n    Skip to next header\n  :p\n    Move to previous header\n  :r\n    Restart current header\n";
+    char helpText[] = "Usage:\n  bcards [options]\n\nTest yourself on flashcards from the command line!\n\nOptions:\n  -d,--deck\n    Prints the deck format guide\n  -f,--file-path\n    Prints current deck save location\n  -s,--set-save\n    Set deck save location to current working directory\n  -S,--force-set-save\n    Same as --set-save but doesn't prompt for user comfirmation\n  -h,--help\n    Displays useful help text\n\nCommands (use when running a flashcard deck):\n  :{i}\n    Skip to header number {i}\n  :h\n    List headers and display help\n  :q\n    Quit program\n  :n  \n    Skip to next header\n  :p\n    Move to previous header\n  :r\n    Restart current header\n\nMaking flashcard decks:\n  For help making decks run\n    bcards -d\n  or\n    bcards -d > DECKFORMATGUIDE.txt\n  and take a look\n\nMan pages are available, and Happy flashcarding!\n";
 
     printf(helpText);
 }

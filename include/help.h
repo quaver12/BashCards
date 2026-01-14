@@ -1,7 +1,9 @@
 #ifndef HELP_C_
 #define HELP_C_
 
-void printHelp(); // from docs/help.c
+// both from docs/help.c
+void printHelp(); 
+void printDeckFormatGuide();
 
 #endif
 
