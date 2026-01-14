@@ -4,6 +4,7 @@
 // both from docs/help.c
 void printHelp(); 
 void printDeckFormatGuide();
+void printTutorial();
 
 #endif
 

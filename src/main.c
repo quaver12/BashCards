@@ -17,6 +17,7 @@
 //  - IMPORTANT 
 //  - make s and S flags not conflict
 //
+//  - remove TUTORIAL.txt and DECKFORMATGUIDE.txt and make bcards print them on install/build
 //
 //  - sort out bcards -h
 //  - add man pages
@@ -57,10 +58,11 @@ int main(int argc, char *argv[]){
         {"file-path",no_argument,0,'f'},
         {"force-set-save",no_argument,0,'S'},
         {"set-save",no_argument,0,'s'},
-        {"help",no_argument,0,'h'}
+        {"help",no_argument,0,'h'},
+        {"tutorial",no_argument,0,'t'}
     };
 
-    while (-1 != (c = getopt_long (argc,argv,"dfhsS",longOptions, &optionIndex))){
+    while (-1 != (c = getopt_long (argc,argv,"dfhsSt",longOptions, &optionIndex))){
         switch(c){
             case 'S':
                 setSave();
@@ -83,6 +85,9 @@ int main(int argc, char *argv[]){
                 break;
             case 'h':
                 printHelp();
+                break;
+            case 't':
+                printTutorial();
                 break;
         }
     }
