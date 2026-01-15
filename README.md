@@ -60,5 +60,7 @@ q::   <<-- be sure to never write a question like this with another colon after 
             (a user will never be able to answer it without writing a command)
 ```
 
+If stuck, man pages are provided, and feel free to consult ```bcards -h``` for help!
+
 #### If anyone else finds any use out of this small project, thank you so much for taking an interest and I hope you find it useful!
 
