@@ -179,7 +179,8 @@ void testme(){
                     i++;
                     break;
                 case ('p'):
-                    i--;
+                    if (i>0)
+                        i--;
                     break;
                 case ('r'): // by default askQuestions return this
                     break; // this will restart current header
