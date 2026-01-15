@@ -14,13 +14,6 @@
 //  - use pointer notation when handling subdeck?
 
 // NEXT TIMES
-//  - IMPORTANT 
-//  - make s and S flags not conflict
-//
-//  - remove TUTORIAL.txt and DECKFORMATGUIDE.txt and make bcards print them on install/build
-//
-//  - sort out bcards -h
-//  - add man pages
 //
 //  - :L   -loop (automatically restart same header when finished)
 //  - :l   -don't loop
@@ -49,9 +42,11 @@ void setSave();        // Sets the deck save locatino to the current working dir
 
 int main(int argc, char *argv[]){
 
-    int opterr = 0;
     int c;
+    int opterr = 0;
     int optionIndex = 0;
+    int forceSaveFlag = 0;
+    int saveFlag = 0;
 
     struct option longOptions[] = {
         {"deck",no_argument,0,'d'},
@@ -65,19 +60,13 @@ int main(int argc, char *argv[]){
     while (-1 != (c = getopt_long (argc,argv,"dfhsSt",longOptions, &optionIndex))){
         switch(c){
             case 'S':
-                setSave();
+                forceSaveFlag=1;
+                break;
+            case 's':
+                saveFlag=1;
                 break;
             case 'd':
                 printDeckFormatGuide();
-                break;
-            case 's':
-                printf("Set deck save location here? y/N ");
-                if (getchar()=='y'){
-                    setSave();
-                    printf("Successfully changed\n");
-                }
-                else
-                    printf("Cancelled\n");
                 break;
             case 'f':
                 char s[BUFFSIZE];
@@ -90,6 +79,18 @@ int main(int argc, char *argv[]){
                 printTutorial();
                 break;
         }
+    }
+
+    if (forceSaveFlag)
+        setSave();
+    else if (saveFlag){
+        printf("Set deck save location here? y/N ");
+        if (getchar()=='y'){
+            setSave();
+            printf("Successfully changed\n");
+        }
+        else
+            printf("Cancelled\n");
     }
 
     if (optind == 1) // run bcards normally if no flags found
