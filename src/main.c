@@ -15,6 +15,8 @@
 
 // NEXT TIMES
 //
+//  - use dynamic memory allocation for help.c?
+//
 //  - :L   -loop (automatically restart same header when finished)
 //  - :l   -don't loop
 //  - :0   -return on failure?
