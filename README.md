@@ -4,41 +4,40 @@ A small CLI flashcards program to help my University studies.
 
 #### Linux
 
-Run the following in your desired file destination:
+To install, run the following:
 ```
 git clone https://github.com/quaver12/BashCards.git
 cd BashCards
 sh install.sh
 ```
 
-###### Will be adding further systems soon.
-
 ## How to Use
 
-To begin, in your terminal simply run:
+To begin, run:
 ```
 bcards
 ```
 
 All your decks of flashcards are saved in one folder.
-By default this is set the the '/decks' directory in the program files.
-You can change your deck save location at any point by visiting ~/.config/bashcards/decksavelocation and changing it!
+By default this is set to the '/decks' directory in the program files.
+You can change this at any point by running ```bcards --set-save``` in the directory you'd like to be you new deck save location.
+You can also visit ~/.config/bashcards/decksavelocation to change this manually.
 
-After starting bashcards, simply type the name of the deck you want to open and nail as many answers as possible!
-You can also skip between different headers at any time by writing ```:``` followed by the header name whenever prompted to answer a question. (E.g. ```:5``` will jump you to the start of header 5).
+When starting bashcards for the first time, select the TUTORIAL example deck to begin with.
 
-Typing ```:n``` will jump to the next header.
+You can skip between different headers at any time by writing ```:``` followed by the header number whenever prompted to answer a question. (E.g. ```:5``` will jump you to the start of header 5).
+
 This is called a command, other commands include:
+
+ - ```:n``` - jump to the next header.
  - ```:q``` - quit
  - ```:h``` - list all headers and help
  - ```:r``` - restart current header
  - ```:p``` - got to previous header
 
-**Note:** using any command with ```:``` will reset any of the progress you may have on the current header. This would only usually come if you accidentally enter one by mistake
-
 ### Making Decks
 
-The download comes with some example 'decks' *(will be adding soon)* - which are just .txt files formatted a certain way.
+Bashcards 'decks' are just .txt files formatted a certain way.
 You can make your own by formatting headers, questions and answers the following way:
 ```
 h:This is a header - headers are asked in the order they appear in the file
