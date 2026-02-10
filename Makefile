@@ -10,6 +10,8 @@ SOURCES := $(shell find $(SRC_DIR) -name '*.c')
 OBJECTS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
 PWD = $(shell pwd)
 
+.PHONY: clean install uninstall
+
 #bcards: build/main.o build/bcdeck.o build/bcutil.o build/help.o docs/bcards.1
 $(TARGET): $(OBJECTS) docs/bcards.1
 	#$(CC) -o bcards src/main.o src/bcdeck.o src/bcutil.o src/help.o
@@ -46,8 +48,17 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -o $@ -c $<
 
 uninstall:
+	#remove config files
+	rm ~/.config/bashcards/decksavelocation
+	#remove program files
+	sudo rm /usr/bin/bcards
+	#remove man files
+	sudo rm /usr/share/man/man1/bcards.1.gz
 
-.PHONY: clean install uninstall
 
 clean:
 	rm -r $(BUILD_DIR)
+
+
+
+
