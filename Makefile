@@ -23,7 +23,7 @@ $(TARGET): $(OBJECTS) docs/bcards.1
 	echo $(PWD)/decks > $(BUILD_DIR)/decksavelocation
 
 	#prep man files
-	gzip -v -k docs/bcards.1
+	gzip -vf -k docs/bcards.1
 
 	echo "build complete"
 
@@ -36,7 +36,7 @@ install: $(TARGET) docs/bcards.1.gz
 
 	#add decksavelocation to user .config
 	mkdir -pv ~/.config/bashcards
-	mv -v $(BUILD_DIR)/decksavelocation ~/.config/bashcards/decksavelocation
+	mv -vf $(BUILD_DIR)/decksavelocation ~/.config/bashcards/decksavelocation
 
 	#once installed make tutorial & deckformatguide decks
 	bcards -d > $(shell bcards -f)/DECKFORMATGUIDE.txt
