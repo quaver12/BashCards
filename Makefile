@@ -1,4 +1,5 @@
 CC = gcc
+CFLAGS = -Wall
 
 #directories
 SRC_DIR = src
@@ -6,23 +7,21 @@ BUILD_DIR = build
 BIN_DIR = bin
 TARGET = $(BIN_DIR)/bcards
 
+#locates all .c files in src for you
 SOURCES := $(shell find $(SRC_DIR) -name '*.c')
 OBJECTS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
-PWD = $(shell pwd)
 
 .PHONY: clean install uninstall
 
-#bcards: build/main.o build/bcdeck.o build/bcutil.o build/help.o docs/bcards.1
 $(TARGET): $(OBJECTS) docs/bcards.1
-	#$(CC) -o bcards src/main.o src/bcdeck.o src/bcutil.o src/help.o
 
 	mkdir -p $(BIN_DIR)
-	$(CC) $(OBJECTS) -o $(TARGET)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET)
 
-	#prep config file
-	echo $(PWD)/decks > $(BUILD_DIR)/decksavelocation
+	#prepare config file
+	echo $(shell pwd)/decks > $(BUILD_DIR)/decksavelocation
 
-	#prep man files
+	#prepare man files
 	gzip -vf -k docs/bcards.1
 
 	@echo "build complete"
