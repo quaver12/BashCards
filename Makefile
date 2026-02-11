@@ -25,9 +25,9 @@ $(TARGET): $(OBJECTS) docs/bcards.1
 	#prep man files
 	gzip -vf -k docs/bcards.1
 
-	echo "build complete"
+	@echo "build complete"
 
-install: $(TARGET) docs/bcards.1.gz
+install:
 	#move program to bin
 	sudo mv -v $(TARGET) /usr/bin/
 	
@@ -41,7 +41,7 @@ install: $(TARGET) docs/bcards.1.gz
 	#once installed make tutorial & deckformatguide decks
 	bcards -d > $(shell bcards -f)/DECKFORMATGUIDE.txt
 	bcards -t > $(shell bcards -f)/TUTORIAL.txt
-	echo "install complete"
+	@echo "install complete"
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(@D)
@@ -54,10 +54,11 @@ uninstall:
 	sudo rm /usr/bin/bcards
 	#remove man files
 	sudo rm /usr/share/man/man1/bcards.1.gz
-
+	@echo "uninstall complete"
 
 clean:
 	rm -r $(BUILD_DIR)
+	@echo "clean complete"
 
 
 
