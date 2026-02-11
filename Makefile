@@ -29,31 +29,32 @@ $(TARGET): $(OBJECTS) docs/bcards.1
 
 install:
 	#move program to bin
-	sudo mv -v $(TARGET) /usr/bin/
+	cp -v $(TARGET) /usr/bin/
 	
 	#move man files
-	sudo cp -v docs/bcards.1.gz /usr/share/man/man1/bcards.1.gz
+	cp -v docs/bcards.1.gz /usr/share/man/man1/bcards.1.gz
+	@echo "install complete, run 'make install-user' to install default user config"
 
+install-user:
 	#add decksavelocation to user .config
 	mkdir -pv ~/.config/bashcards
-	mv -vf $(BUILD_DIR)/decksavelocation ~/.config/bashcards/decksavelocation
+	cp -vf $(BUILD_DIR)/decksavelocation ~/.config/bashcards/decksavelocation
 
-	#once installed make tutorial & deckformatguide decks
-	bcards -d > $(shell bcards -f)/DECKFORMATGUIDE.txt
-	bcards -t > $(shell bcards -f)/TUTORIAL.txt
-	@echo "install complete"
+	#once make tutorial & deckformatguide decks
+	bcards -d > $$(bcards -f)/DECKFORMATGUIDE.txt
+	bcards -t > $$(bcards -f)/TUTORIAL.txt
+	@echo "installed default config setup for this user"
+
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(@D)
 	$(CC) -o $@ -c $<
 
 uninstall:
-	#remove config files
-	rm ~/.config/bashcards/decksavelocation
 	#remove program files
-	sudo rm /usr/bin/bcards
+	rm -f /usr/bin/bcards
 	#remove man files
-	sudo rm /usr/share/man/man1/bcards.1.gz
+	rm -f /usr/share/man/man1/bcards.1.gz
 	@echo "uninstall complete"
 
 clean:

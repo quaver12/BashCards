@@ -8,7 +8,7 @@ To install, run the following:
 ```
 git clone https://github.com/quaver12/BashCards.git
 cd BashCards
-make && sudo make install
+make && sudo make install && make install-user
 ```
 
 ## How to Use
