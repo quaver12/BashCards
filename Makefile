@@ -1,4 +1,5 @@
 CC = gcc
+CFLAGS = -Wall
 
 #directories
 SRC_DIR = src
@@ -6,26 +7,34 @@ BUILD_DIR = build
 BIN_DIR = bin
 TARGET = $(BIN_DIR)/bcards
 
+#locates all .c files in src for you
 SOURCES := $(shell find $(SRC_DIR) -name '*.c')
 OBJECTS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
-PWD = $(shell pwd)
 
-.PHONY: clean install uninstall
+.PHONY: clean install install-user uninstall
 
-#bcards: build/main.o build/bcdeck.o build/bcutil.o build/help.o docs/bcards.1
-$(TARGET): $(OBJECTS) docs/bcards.1
-	#$(CC) -o bcards src/main.o src/bcdeck.o src/bcutil.o src/help.o
-
+$(TARGET): $(OBJECTS) docs/bcards.1.gz $(BUILD_DIR)/decksavelocation
+	#compile program
 	mkdir -p $(BIN_DIR)
-	$(CC) $(OBJECTS) -o $(TARGET)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET)
+	@echo "build complete"
 
-	#prep config file
-	echo $(PWD)/decks > $(BUILD_DIR)/decksavelocation
 
-	#prep man files
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+
+docs/bcards.1.gz: docs/bcards.1
+	#prepare man files
 	gzip -vf -k docs/bcards.1
 
-	@echo "build complete"
+
+$(BUILD_DIR)/decksavelocation:
+	#prepare config file
+	echo "$$PWD/decks" > $@
+
+
 
 install:
 	#move program to bin
@@ -45,11 +54,6 @@ install-user:
 	bcards -t > $$(bcards -f)/TUTORIAL.txt
 	@echo "installed default config setup for this user"
 
-
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	mkdir -p $(@D)
-	$(CC) -o $@ -c $<
-
 uninstall:
 	#remove program files
 	rm -f /usr/bin/bcards
@@ -58,7 +62,7 @@ uninstall:
 	@echo "uninstall complete"
 
 clean:
-	rm -r $(BUILD_DIR)
+	rm -rf $(BUILD_DIR) $(BIN_DIR)
 	@echo "clean complete"
 
 
