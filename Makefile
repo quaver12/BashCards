@@ -11,20 +11,30 @@ TARGET = $(BIN_DIR)/bcards
 SOURCES := $(shell find $(SRC_DIR) -name '*.c')
 OBJECTS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
 
-.PHONY: clean install uninstall
+.PHONY: clean install install-user uninstall
 
-$(TARGET): $(OBJECTS) docs/bcards.1
-
+$(TARGET): $(OBJECTS) docs/bcards.1.gz $(BUILD_DIR)/decksavelocation
+	#compile program
 	mkdir -p $(BIN_DIR)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET)
+	@echo "build complete"
 
-	#prepare config file
-	echo $(shell pwd)/decks > $(BUILD_DIR)/decksavelocation
 
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+
+docs/bcards.1.gz: docs/bcards.1
 	#prepare man files
 	gzip -vf -k docs/bcards.1
 
-	@echo "build complete"
+
+$(BUILD_DIR)/decksavelocation:
+	#prepare config file
+	echo "$$PWD/decks" > $@
+
+
 
 install:
 	#move program to bin
@@ -44,11 +54,6 @@ install-user:
 	bcards -t > $$(bcards -f)/TUTORIAL.txt
 	@echo "installed default config setup for this user"
 
-
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	mkdir -p $(@D)
-	$(CC) -o $@ -c $<
-
 uninstall:
 	#remove program files
 	rm -f /usr/bin/bcards
@@ -57,7 +62,7 @@ uninstall:
 	@echo "uninstall complete"
 
 clean:
-	rm -r $(BUILD_DIR)
+	rm -rf $(BUILD_DIR) $(BIN_DIR)
 	@echo "clean complete"
 
 
